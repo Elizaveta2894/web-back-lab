@@ -60,22 +60,55 @@ count = 0
 @app.route('/counter')
 def counter():
     global count
-    count +=1
+    count += 1
     time = datetime.datetime.today()
     url = request.url
     client_ip = request.remote_addr
-    return '''
+    
+    clear_url = url_for('clear_counter')
+    
+    return f'''
 <!doctype html>
 <html>
+    <head>
+        <title>Счетчик посещений</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            h1 {{ color: #333; }}
+            a {{ color: #0066cc; text-decoration: none; }}
+            a:hover {{ text-decoration: underline; }}
+            .info {{ background: #f5f5f5; padding: 15px; border-radius: 5px; }}
+        </style>
+    </head>
     <body>
-        Сколько раз вы сюда заходили: ''' + str(count) + '''
+        <h1> Счетчик посещений</h1>
+        
+        <div class="info">
+            <strong>Сколько раз вы сюда заходили:</strong> {count}
+        </div>
+        
         <hr>
-        Дата и время: ''' + str(time) + '''<br>
-        Запрошенный адрес: ''' + url + '''<br>
-        Ваш IP адрес: ''' + str(client_ip) + '''<br>
+        
+        <div>
+            <strong>Дата и время:</strong> {time}<br>
+            <strong>Запрошенный адрес:</strong> {url}<br>
+            <strong>Ваш IP адрес:</strong> {client_ip}<br>
+        </div>
+        
+        <hr>
+        
+        <a href="{clear_url}"> Очистить счетчик</a>
     </body>
 </html>
 '''
+
+@app.route('/clear_counter')
+def clear_counter():
+    global count
+    count = 0
+    return redirect(url_for('counter'))
+
+
 @app.route("/info")
 def info():
     return redirect('/author')
