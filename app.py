@@ -129,3 +129,114 @@ def created():
 @app.errorhandler(404)
 def not_found(err):
     return "нет такой страницы", 404
+
+@app.route("/")
+@app.route('/index')
+def index():
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>НГТУ, ФБ, Лабораторные работы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: red;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: green;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: #006b52;
+        }
+        main {
+            padding: 20px;
+            min-height: 400px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+        </header>
+        
+        <nav>
+            <a href="/lab1">Первая лабораторная</a>
+        </nav>
+        
+        <main>
+            <h2>Добро пожаловать на сайт лабораторных работ!</h2>
+            <p>Здесь будут размещены все лабораторные работы по курсу WEB-программирование.</p>
+        </main>
+        
+        <footer>
+            Елизавета, Группа ФБИ-33, 3 курс, 2025 год
+        </footer>
+    </div>
+</body>
+</html>
+'''
+
+@app.route('/lab1')
+def lab1():
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Первая лабораторная</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .menu { margin: 20px 0; }
+        .menu a { color: #0066cc; text-decoration: none; margin-right: 20px; }
+        .menu a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Первая лабораторная работа</h1>
+    
+    <div class="menu">
+        <a href="/">Главная страница</a>
+        <a href="/lab1/image">Изображение</a>
+        <a href="/counter">Счетчик</a>
+    </div>
+    
+    <h2>Задания лабораторной работы:</h2>
+    <ul>
+        <li>Страница с изображением</li>
+        <li>Страница со счетчиком посещений</li>
+        <li>Подключение CSS стилей</li>
+    </ul>
+</body>
+</html>
+'''
