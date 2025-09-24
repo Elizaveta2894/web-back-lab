@@ -3,7 +3,7 @@ import datetime
 app = Flask(__name__)
 
 @app.route("/")
-@app.route("/web")
+@app.route("/lab1/web")
 def web():
     return """<! doctype html>" 
         "<html>"
@@ -17,7 +17,7 @@ def web():
             }
 
 
-@app.route("/author")
+@app.route("/lab1/author")
 def author():
     name = 'Стабровская Елизавета Евгеньевна'
     group= 'ФБИ-33'
@@ -57,7 +57,7 @@ def image():
 
 count = 0
 
-@app.route('/counter')
+@app.route('/lab1/counter')
 def counter():
     global count
     count += 1
@@ -102,14 +102,14 @@ def counter():
 </html>
 '''
 
-@app.route('/clear_counter')
+@app.route('/lab1/clear_counter')
 def clear_counter():
     global count
     count = 0
     return redirect(url_for('counter'))
 
 
-@app.route("/info")
+@app.route("/lab1/info")
 def info():
     return redirect('/author')
 
