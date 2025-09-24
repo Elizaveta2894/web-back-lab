@@ -35,18 +35,25 @@ def author():
 
 
 
-@app.route("/image")
+@app.route('/lab1/image')
 def image():
-    path = url_for('static', filename='s-I1600.jpg')
-    return (
-        "<!doctype html>"
-        "<html>"
-        "   <body>"
-        "       <h1>Дуб</h1>"
-        f"       <img src='{path}'>"
-        "   </body>"
-        "</html>"
-    )
+    css_url = url_for('static', filename='lab1.css')
+    return f'''
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{css_url}">
+        <title>Леопард</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Леопард</h1>
+            <img src="/static/i.webp" alt="Леопард">
+            <p>Леопард(барс, пантера, лат. Panthera pardus) — вид хищных млекопитающих семейства кошачьих.</p>
+        </div>
+    </body> 
+</html>
+'''
 
 count = 0
 
