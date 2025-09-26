@@ -42,33 +42,91 @@ def image():
     
     html_content = f'''
 <!doctype html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{css_url}">
-        <title>Леопард</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Леопард</h1>
-            <img src="/static/i.webp" alt="Леопард">
-            <p>Леопард(барс, пантера, лат. Panthera pardus) — вид хищных млекопитающих семейства кошачьих.</p>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{css_url}">
+    <title>Леопард - Лабораторная 1</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            min-height: 100vh;
+        }}
+        .container {{
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }}
+        h1 {{
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 30px;
+        }}
+        img {{
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: block;
+            margin: 0 auto 20px;
+        }}
+        p {{
+            font-size: 18px;
+            line-height: 1.6;
+            color: #2d3436;
+            text-align: center;
+            background: #dfe6e9;
+            padding: 20px;
+            border-radius: 8px;
+        }}
+        .nav-links {{
+            text-align: center;
+            margin-top: 30px;
+        }}
+        .nav-links a {{
+            display: inline-block;
+            margin: 0 10px;
+            padding: 12px 25px;
+            background: #00b894;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }}
+        .nav-links a:hover {{
+            background: #00a085;
+            transform: translateY(-2px);
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Леопард</h1>
+        <img src="/static/i.webp" alt="Леопард">
+        <p>Леопард (барс, пантера, лат. Panthera pardus) — вид хищных млекопитающих семейства кошачьих.</p>
+        
+        <div class="nav-links">
+            <a href="/lab1">← Назад к лабораторной работе</a>
+            <a href="/">На главную страницу →</a>
         </div>
-    </body> 
+    </div>
+</body>
 </html>
 '''
     
-    # Создаем response с HTML контентом
+    from flask import make_response
     response = make_response(html_content)
-    
-    # Добавляем стандартный заголовок Content-Language
-    response.headers['Content-Language'] = 'ru'  # Язык контента - русский
-    
-    # Добавляем кастомные нестандартные заголовки
-    response.headers['X-Animal-Type'] = 'Big Cat'  # Тип животного
-    response.headers['X-Page-Theme'] = 'Wildlife'  # Тема страницы
-    response.headers['X-Content-Category'] = 'Educational'  # Категория контента
-    response.headers['X-Scientific-Name'] = 'Panthera pardus'  # Научное название
-    response.headers['X-Page-Generated'] = 'Flask Server'  # Информация о генерации
+    response.headers['Content-Language'] = 'ru'
+    response.headers['X-Animal-Type'] = 'Big Cat'
+    response.headers['X-Page-Theme'] = 'Wildlife'
     
     return response
 
@@ -116,6 +174,7 @@ def counter():
         <hr>
         
         <a href="{clear_url}"> Очистить счетчик</a>
+        <p><a href="/lab1">← Вернуться к лабораторной</a></p>
     </body>
 </html>
 '''
@@ -247,85 +306,68 @@ def not_found(err):
                 this.style.transform = 'scale(1)';
             });
         </script>
-    </body>
-    </html>
-    """
+</body>
+</html>
+"""
     return error_page, 404
 
 
 
-@app.route("/")
+@app.route('/')
 @app.route('/index')
-def index():  
+def index():
     return '''
 <!doctype html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>НГТУ, ФБ, Лабораторные работы</title>
+    <title>Главное меню</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body { 
+            font-family: Arial, sans-serif; 
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: red;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        nav {
-            background-color: green;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            display: inline-block;
-        }
-        nav a:hover {
-            background-color: #006b52;
-        }
-        main {
-            padding: 20px;
-            min-height: 400px;
-        }
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .menu-link {
+            display: block;
+            background: #0066cc;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        .menu-link:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
-        </header>
-        
-        <nav>
-            <a href="/lab1">Первая лабораторная</a>
-        </nav>
-        
-        <main>
-            <h2>Добро пожаловать на сайт лабораторных работ!</h2>
-            <p>Здесь будут размещены все лабораторные работы по курсу WEB-программирование.</p>
-        </main>
-        
-        <footer>
-            Елизавета, Группа ФБИ-33, 3 курс, 2025 год
-        </footer>
+        <h1>Главное меню</h1>
+        <a href="/lab1" class="menu-link">Перейти к лабораторной работе 1</a>
     </div>
 </body>
 </html>
@@ -333,62 +375,50 @@ def index():
 
 @app.route('/lab1')
 def lab1():
-    return '''
-<!doctype html>
-<html lang="ru">
+    html = '''
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Лабораторная 1</title>
+    <title>Лаб 1</title>
     <style>
-        body { font-family: Arial; margin: 40px; }
-        .menu { margin: 20px 0; }
-        .menu a { color: #0066cc; text-decoration: none; margin-right: 20px; }
-        .menu a:hover { text-decoration: underline; }
-        .text {
-            font-size: 20px;
-            color: #333;
-            text-align: justify;
-            margin: 40px 0;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            border-left: 4px solid #0066cc;
-        }
+        body { font-family: Arial; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        h2 { color: #666; margin-top: 30px; }
+        .menu a { display: inline-block; margin: 5px; padding: 10px; 
+                  background: #28a745; color: white; text-decoration: none; 
+                  border-radius: 3px; }
+        .routes { background: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .routes a { display: block; padding: 8px; margin: 5px 0; 
+                    background: white; border-left: 4px solid #007bff; }
     </style>
 </head>
 <body>
-    <h1>Первая лабораторная работа</h1>
+    <h1>Лабораторная работа 1</h1>
     
     <div class="menu">
-        <a href="/">Главная страница</a>
+        <a href="/">Главная</a>
+        <a href="/index">Index</a>
         <a href="/lab1/image">Изображение</a>
         <a href="/counter">Счетчик</a>
+        <a href="/error500">Ошибка 500</a>
     </div>
 
-    <div class="text">
-        Flask — фреймворк для создания веб-приложений на языке
-        программирования Python, использующий набор инструментов
-        Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
-        называемых микрофреймворков — минималистичных каркасов
-        веб-приложений, сознательно предоставляющих лишь самые ба-
-        зовые возможности.
+    <p>Flask — микрофреймворк для веб-приложений на Python.</p>
+    
+    <h2>Список роутов</h2>
+    <div class="routes">
+        <a href="/">/ (Главная)</a>
+        <a href="/index">/index (Альтернативная главная)</a>
+        <a href="/lab1">/lab1 (Эта страница)</a>
+        <a href="/lab1/image">/lab1/image (Изображение леопарда)</a>
+        <a href="/counter">/counter (Счетчик посещений)</a>
+        <a href="/error500">/error500 (Тест ошибки сервера)</a>
+        <a href="/nonexistent">/nonexistent (Тест 404 ошибки)</a>
     </div>
-    
-    <p style="text-align: center;">
-        <a href="/">Вернуться на главную страницу</a>
-    </p>
-    
-    <h2>Задания лабораторной работы:</h2>
-    <ul>
-        <li>Страница с изображением</li>
-        <li>Страница со счетчиком посещений</li>
-        <li>Подключение CSS стилей</li>
-    </ul>
 </body>
 </html>
 '''
-
+    return html
 
 
 @app.route('/error500')
