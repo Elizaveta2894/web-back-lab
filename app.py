@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect
+from flask import Flask, url_for, request, redirect, render_template, abort, make_response
 import datetime
 app = Flask(__name__)
 
@@ -128,7 +128,113 @@ def created():
 
 @app.errorhandler(404)
 def not_found(err):
-    return "нет такой страницы", 404
+    error_page = """
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Страница не найдена</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                color: white;
+                text-align: center;
+            }
+            .error-container {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+                max-width: 500px;
+                margin: 20px;
+            }
+            h1 {
+                font-size: 4em;
+                margin: 0;
+                color: #ffd700;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            h2 {
+                font-size: 1.8em;
+                margin: 10px 0 20px 0;
+            }
+            p {
+                font-size: 1.2em;
+                line-height: 1.6;
+                margin-bottom: 30px;
+            }
+            .emoji {
+                font-size: 5em;
+                margin: 20px 0;
+                display: block;
+            }
+            .home-button {
+                display: inline-block;
+                background: #ff6b6b;
+                color: white;
+                padding: 12px 30px;
+                text-decoration: none;
+                border-radius: 50px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+                font-size: 1.1em;
+            }
+            .home-button:hover {
+                background: #ff5252;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            }
+            .search-icon {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 20px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <div class="search-icon">🔍</div>
+            <h1>404</h1>
+            <h2>Ой! Страница потерялась в космосе</h2>
+            <p>Похоже, эта страница отправилась в незапланированное путешествие. Возможно, она сейчас любуется звездами где-то далеко-далеко...</p>
+            <img src="/static/li.webp" alt="Космос" style="width: 200px; height: 120px; margin: 0 auto 20px; display: block;">
+            <p>Но не расстраивайтесь! Вы можете вернуться на главную страницу и продолжить исследование нашего сайта.</p>
+            <button class="home-button" onclick="window.location.href='/'">Вернуться на главную</button>
+        </div>
+        
+        <script>
+            // Добавляем немного интерактивности
+            document.querySelector('.home-button').addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            document.querySelector('.home-button').addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        </script>
+    </body>
+    </html>
+    """
+    return error_page, 404
+
+
 
 @app.route("/")
 @app.route('/index')
