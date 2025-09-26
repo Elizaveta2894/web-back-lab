@@ -1,5 +1,6 @@
-from flask import Flask, url_for, request, redirect, render_template, abort, make_response
+from flask import Flask, url_for, request, redirect, render_template, abort, make_response,  send_file, Response
 import datetime
+import os
 app = Flask(__name__)
 
 @app.route("/")
@@ -38,7 +39,8 @@ def author():
 @app.route('/lab1/image')
 def image():
     css_url = url_for('static', filename='lab1.css')
-    return f'''
+    
+    html_content = f'''
 <!doctype html>
 <html>
     <head>
@@ -54,7 +56,23 @@ def image():
     </body> 
 </html>
 '''
+    
+    # Создаем response с HTML контентом
+    response = make_response(html_content)
+    
+    # Добавляем стандартный заголовок Content-Language
+    response.headers['Content-Language'] = 'ru'  # Язык контента - русский
+    
+    # Добавляем кастомные нестандартные заголовки
+    response.headers['X-Animal-Type'] = 'Big Cat'  # Тип животного
+    response.headers['X-Page-Theme'] = 'Wildlife'  # Тема страницы
+    response.headers['X-Content-Category'] = 'Educational'  # Категория контента
+    response.headers['X-Scientific-Name'] = 'Panthera pardus'  # Научное название
+    response.headers['X-Page-Generated'] = 'Flask Server'  # Информация о генерации
+    
+    return response
 
+    
 count = 0
 
 @app.route('/lab1/counter')
