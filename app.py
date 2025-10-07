@@ -613,5 +613,10 @@ def flower(name):
     </body>
 </html>
 '''
+
+@app.route('/lab2/example')
+def example():
+    return render_template('example.html')
+    
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
