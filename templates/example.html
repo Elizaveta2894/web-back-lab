@@ -4,34 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стабровская Елизавета. {{count}}</title>
-    <style>
-        .math-operation {
-            font-family: 'Courier New', monospace;
-            background: #2d3436;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-        .expression {
-            font-size: 18px;
-            margin: 15px 0;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            border-left: 4px solid #667eea;
-        }
-        .result {
-            font-weight: bold;
-            color: #2d3436;
-            margin-left: 10px;
-        }
-        .superscript {
-            vertical-align: super;
-            font-size: 0.7em;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
 </head>
 <body>
     <header>
