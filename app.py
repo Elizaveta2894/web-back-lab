@@ -203,223 +203,6 @@ def created():
 ''', 201
 
 
-@app.errorhandler(404)
-def not_found(err):
-    user_ip = request.remote_addr
-    access_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    requested_url = request.url
-  
-    log_entry = {
-        'ip': user_ip,
-        'date': access_date,
-        'url': requested_url,
-        'user_agent': request.headers.get('User-Agent', 'Unknown')
-    }
-    error_log.append(log_entry)
-
-    if len(error_log) > 50:
-        error_log.pop(0)
-
-    error_page = f"""
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Страница не найдена</title>
-        <style>
-            body {{
-                font-family: 'Arial', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                margin: 0;
-                padding: 20px;
-                color: white;
-                min-height: 100vh;
-            }}
-            .error-container {{
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-                max-width: 800px;
-                margin: 20px auto;
-            }}
-            .info-container {{
-                background: rgba(255, 255, 255, 0.15);
-                padding: 20px;
-                border-radius: 10px;
-                margin: 20px 0;
-                text-align: left;
-            }}
-            .log-container {{
-                background: rgba(0, 0, 0, 0.2);
-                padding: 20px;
-                border-radius: 10px;
-                margin: 30px 0;
-                max-height: 300px;
-                overflow-y: auto;
-            }}
-            h1 {{
-                font-size: 4em;
-                margin: 0;
-                color: #ffd700;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-                text-align: center;
-            }}
-            h2 {{
-                font-size: 1.8em;
-                margin: 10px 0 20px 0;
-                text-align: center;
-            }}
-            h3 {{
-                color: #ffd700;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-                padding-bottom: 10px;
-            }}
-            p {{
-                font-size: 1.2em;
-                line-height: 1.6;
-                margin-bottom: 15px;
-            }}
-            .info-line {{
-                display: flex;
-                justify-content: space-between;
-                margin: 10px 0;
-                padding: 8px;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 5px;
-            }}
-            .info-label {{
-                font-weight: bold;
-                color: #ffd700;
-            }}
-            .log-entry {{
-                background: rgba(255, 255, 255, 0.1);
-                margin: 5px 0;
-                padding: 10px;
-                border-radius: 5px;
-                border-left: 3px solid #ff6b6b;
-            }}
-            .log-header {{
-                font-weight: bold;
-                color: #ffd700;
-            }}
-            .home-button {{
-                display: inline-block;
-                background: #ff6b6b;
-                color: white;
-                padding: 12px 30px;
-                text-decoration: none;
-                border-radius: 50px;
-                font-weight: bold;
-                transition: all 0.3s ease;
-                border: none;
-                cursor: pointer;
-                font-size: 1.1em;
-                margin: 10px;
-            }}
-            .home-button:hover {{
-                background: #ff5252;
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-            }}
-            .button-container {{
-                text-align: center;
-                margin: 30px 0;
-            }}
-            .search-icon {{
-                width: 100px;
-                height: 100px;
-                margin: 0 auto 20px;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 40px;
-            }}
-            .timestamp {{
-                font-size: 0.9em;
-                color: #ccc;
-                font-style: italic;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="error-container">
-            <div class="search-icon">🔍</div>
-            <h1>404</h1>
-            <h2>Ой! Страница потерялась в космосе</h2>
-            
-            <div class="info-container">
-                <h3>Информация о запросе</h3>
-                <div class="info-line">
-                    <span class="info-label">IP-адрес:</span>
-                    <span>{user_ip}</span>
-                </div>
-                <div class="info-line">
-                    <span class="info-label">Дата и время:</span>
-                    <span>{access_date}</span>
-                </div>
-                <div class="info-line">
-                    <span class="info-label">Запрошенный URL:</span>
-                    <span>{requested_url}</span>
-                </div>
-                <div class="info-line">
-                    <span class="info-label">User-Agent:</span>
-                    <span>{request.headers.get('User-Agent', 'Неизвестно')}</span>
-                </div>
-            </div>
-            
-            <p>Похоже, эта страница отправилась в незапланированное путешествие. Возможно, она сейчас любуется звездами где-то далеко-далеко...</p>
-            
-            <div class="button-container">
-                <button class="home-button" onclick="window.location.href='/'">🏠 Вернуться на главную</button>
-                <button class="home-button" onclick="window.location.href='/index'">📋 На страницу index</button>
-                <button class="home-button" onclick="window.location.href='/lab1'">🔬 К лабораторной работе</button>
-            </div>
-            
-            <div class="log-container">
-                <h3>📊 Лог 404 ошибок (последние {len(error_log)} записей)</h3>
-                {"".join([f'''
-                <div class="log-entry">
-                    <div class="log-header">🕐 {entry['date']} | 🌐 {entry['ip']}</div>
-                    <div>🔗 {entry['url']}</div>
-                    <div class="timestamp">📱 {entry['user_agent'][:100]}{'...' if len(entry['user_agent']) > 100 else ''}</div>
-                </div>
-                ''' for entry in reversed(error_log)])}
-                
-                {f'<p style="text-align: center; color: #ccc;">Всего записей в логе: {len(error_log)}</p>' if error_log else '<p style="text-align: center; color: #ccc;">Лог пуст</p>'}
-            </div>
-            
-            <p style="text-align: center; font-size: 0.9em; color: rgba(255, 255, 255, 0.7);">
-                Если вы считаете, что это ошибка, свяжитесь с администратором.
-            </p>
-        </div>
-        
-        <script>
-            // Интерактивность для кнопок
-            document.querySelectorAll('.home-button').forEach(button => {{
-                button.addEventListener('mouseover', function() {{
-                    this.style.transform = 'scale(1.05)';
-                }});
-                
-                button.addEventListener('mouseout', function() {{
-                    this.style.transform = 'scale(1)';
-                }});
-            }});
-            
-            // Автоматическая прокрутка к новым записям лога
-            const logContainer = document.querySelector('.log-container');
-            if (logContainer) {{
-                logContainer.scrollTop = logContainer.scrollHeight;
-            }}
-        </script>
-    </body>
-    </html>
-    """
-    return error_page, 404
 
 
 
@@ -784,5 +567,30 @@ def internal_server_error(err):
     </body>
     </html>
     """
-    return error_page, 500
+
+@app.errorhandler(404)
+def not_found(error):
+    global error_log
+    if 'error_log' not in globals():
+        error_log = []
+    
+    log_entry = {
+        'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'url': request.url,
+        'error': str(error)
+    }
+    error_log.append(log_entry)
+    
+    return render_template('404.html'), 404
+
+@app.route('/lab2/a')
+def a():
+    return 'без слеша'
+
+@app.route('/lab2/a/')
+def a2():
+    return 'со слешем'
+    
+
+if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
