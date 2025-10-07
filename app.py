@@ -616,7 +616,8 @@ def flower(name):
 
 @app.route('/lab2/example')
 def example():
-    return render_template('example.html')
-    
+    name = 'Стабровская Елизавета'
+    return render_template('example.html', name=name)
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
