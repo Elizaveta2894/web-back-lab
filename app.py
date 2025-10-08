@@ -617,10 +617,16 @@ def flower(name):
 @app.route('/lab2/example')
 def example():
     name = 'Стабровская Елизавета'
-    count= 'Лабораторная работа 2'
-    group= 'ФБИ-33'
-    number_course='3 курс'
-    return render_template('example.html', name=name, count=count, group=group,  number_course= number_course)
+    count = 'Лабораторная работа 2'
+    group = 'ФБИ-33'
+    number_course = '3 курс'
+    lab_num = 2
+    return render_template('example.html', 
+                         name=name, 
+                         count=count, 
+                         group=group, 
+                         number_course=number_course,
+                         lab_num=lab_num)
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)

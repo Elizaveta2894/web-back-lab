@@ -3,15 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Стабровская Елизавета. {{count}}</title>
+    <title>
+        {% if name %}
+            {{ name }}. {{ count }}
+        {% else %}
+            Неизвестный студент. {{ count }}
+        {% endif %}
+    </title>
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть2. {{count}}
+        WEB-программирование, часть2. {% if lab_num %}Лабораторная работа {{lab_num}}{% endif %}
     </header>
+<div class="student-info">
+            <strong>Информация о студенте:</strong><br>
+            {% if name %}
+                Имя: {{ name }}<br>
+            {% else %}
+                Имя: <em>Не указано</em><br>
+            {% endif %}
+            
+            {% if group %}
+                Группа: {{ group }}<br>
+            {% else %}
+                Группа: <em>Группа не назначена</em><br>
+            {% endif %}
+            
+            {% if number_course %}
+                Курс: {{ number_course }}<br>
+            {% else %}
+                Курс: <em>Курс не указан</em><br>
+            {% endif %}
+        </div>
 
     <main>
+        <h3>Математические выражения:</h3>
+ 
          <div class="expression">
                 <span class="math-operation">11 × 28</span> = <span class="result">{{11*28}}</span>
             </div>
@@ -27,8 +55,25 @@
            
     </main>
 
-    <footer>
-        &copy; {{ name }}, {{group}},{{number_course}}. 2025
-    </footer> 
+     <footer>
+            &copy; 
+            {% if name %}
+                {{ name }},
+            {% else %}
+                Анонимный студент,
+            {% endif %}
+            
+            {% if group %}
+                {{ group }},
+            {% else %}
+                Без группы,
+            {% endif %}
+            
+            {% if number_course %}
+                {{ number_course }}
+            {% else %}
+                не указан курс
+            {% endif %}. 2025
+        </footer>
 </body>
 </html>
