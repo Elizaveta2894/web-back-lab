@@ -52,7 +52,11 @@
             <div class="expression">
                 <span class="math-operation">45<sup>8</sup></span> = <span class="result">{{45**8}}</span>
             </div>
-           
+          <ul>
+            {% for f in fruits %}
+            <li>{{loop.index}} - {{f.name}}: {{f.price}} &#x20bd</li>
+            {% endfor %}
+          </ul> 
     </main>
 
      <footer>
