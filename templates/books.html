@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список книг</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .book {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .book-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        .book-author {
+            color: #7f8c8d;
+        }
+        .book-genre {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .book-pages {
+            float: right;
+            color: #95a5a6;
+        }
+        .stats {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Список книг</h1>
+    
+    <div class="stats">
+        Всего книг в коллекции: {{ books|length }}
+    </div>
+
+    {% for book in books %}
+    <div class="book">
+        <div class="book-title">{{ book.title }}</div>
+        <div class="book-author">Автор: {{ book.author }}</div>
+        <span class="book-genre">{{ book.genre }}</span>
+        <span class="book-pages">{{ book.pages }} стр.</span>
+    </div>
+    {% endfor %}
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/lab2">← Назад к лабораторной работе</a>
+    </div>
+</body>
+</html>
