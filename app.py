@@ -591,26 +591,75 @@ def a():
 def a2():
     return 'со слешем'
 
-flower_list = ['роза','тюльпан','незабудка','ромашка']
+flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
+
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
-    if flower_id>= len(flower_list):
+    if flower_id >= len(flower_list) or flower_id < 0:
         abort(404)
     else:
-        return "цветок:"+ flower_list[flower_id]
+        return f'''
+<html>
+<body>
+    <h1>Цветок #{flower_id}</h1>
+    <p>Название: {flower_list[flower_id]}</p>
+    <a href="/lab2/all_flowers">Все цветы</a>
+</body>
+</html>
+'''
 
 @app.route('/lab2/add_flower/<name>')
-def flower(name):
+def add_flower_with_name(name):
     flower_list.append(name)
     return f'''
-<!doctype html>
 <html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name} </p>
+<body>
+    <h1>Цветок добавлен</h1>
+    <p>Добавлен: {name}</p>
     <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}</p>
-    </body>
+    <a href="/lab2/all_flowers">Все цветы</a>
+</body>
+</html>
+'''
+
+@app.route('/lab2/add_flower/')
+def add_flower_without_name():
+    return '''
+<html>
+<body>
+    <h1>Ошибка 400</h1>
+    <p>Вы не задали имя цветка</p>
+    <a href="/lab2/all_flowers">Все цветы</a>
+</body>
+</html>
+''', 400
+
+@app.route('/lab2/all_flowers')
+def all_flowers():
+    flowers_html = ''.join([f'<li><a href="/lab2/flowers/{i}">{flower}</a></li>' for i, flower in enumerate(flower_list)])
+    return f'''
+<html>
+<body>
+    <h1>Все цветы</h1>
+    <p>Количество: {len(flower_list)}</p>
+    <ul>{flowers_html}</ul>
+    <a href="/lab2/add_flower">Добавить цветок</a>
+    <a href="/lab2/clear_flowers">Очистить список</a>
+</body>
+</html>
+'''
+
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return '''
+<html>
+<body>
+    <h1>Список очищен</h1>
+    <p>Все цветы удалены</p>
+    <a href="/lab2/all_flowers">Все цветы</a>
+    <a href="/lab2/add_flower">Добавить цветок</a>
+</body>
 </html>
 '''
 
