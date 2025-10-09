@@ -632,5 +632,11 @@ def example():
 @app.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
+
+@app.route('/lab2/filtres')
+def filtres():
+    phrase="О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
+    return render_template('filter.html', phrase=phrase)
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
