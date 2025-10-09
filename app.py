@@ -687,5 +687,27 @@ def filtres():
     phrase="О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase=phrase)
 
+
+@app.route('/lab2/calc/')
+def calc_default():
+    """Перенаправление на калькулятор с значениями по умолчанию"""
+    return redirect('/lab2/calc/1/1')
+
+@app.route('/lab2/calc/<int:a>')
+def calc_single(a):
+    """Перенаправление на калькулятор с одним числом и вторым по умолчанию"""
+    return redirect(f'/lab2/calc/{a}/1')
+
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    operations = {
+        'sum': a + b,
+        'difference': a - b,
+        'product': a * b,
+        'quotient': a / b if b != 0 else 'Ошибка: деление на ноль',
+        'power': a ** b
+    }
+    
+    return render_template('calc.html', a=a, b=b, operations=operations)
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
