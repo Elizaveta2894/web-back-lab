@@ -728,5 +728,112 @@ books = [
 @app.route('/lab2/books')
 def books_list():
     return render_template('books.html', books=books)
+
+cats = [
+    {
+        'name': 'Такса',
+        'image': 'a7675d70f12e9911ea69fe9666ceae42.jpg',
+        'description': 'Милая сосиска.'
+    },
+    {
+        'name': 'Пудель',
+        'image': 'cc8658fbaa3f9622235a0e3be8759a29.jpg',
+        'description': 'Белое облачко.'
+    },
+    {
+        'name': 'Хаски',
+        'image': '59cd46c3fa80363b2267f9b142b21301.jpg',
+        'description': 'Разные глазки.'
+    },
+    {
+        'name': 'Немецкая овчарка',
+        'image': '2dc3c030431710c0eccf56c376376c2f.jpg',
+        'description': 'Серьезная собака.'
+    },
+    {
+        'name': 'Алабай',
+        'image': '1f83db3c6aa33be78e996d717ec7ac2e.jpg',
+        'description': 'Не люблю эту породу, покусали в детстве.'
+    },
+    {
+        'name': 'Доберман',
+        'image': '6766da6bba7e9db14e6d94e873276e6d.jpg',
+        'description': 'Зверь, а не собака.'
+    },
+    {
+        'name': 'Сиба-ину',
+        'image': '5864bbc3fb2a2034a0c619d82427d31e.jpg',
+        'description': 'Плачу как впервый раз, смотря "Хатико".'
+    },
+    {
+        'name': 'Бульдог',
+        'image': '0e80503c2a88ad187c1777875086ce74.jpg',
+        'description': 'Похож на милую свинку.'
+    },
+    {
+        'name': 'Шпиц',
+        'image': '420ae034ee040ce2a5232e6cf845453b.jpg',
+        'description': 'Собака истинных леди.'
+    },
+    {
+        'name': 'Бишон фризе',
+        'image': '8847d87ad716fcd9f8440ecdfccae916.jpg',
+        'description': 'У меня моя краостка такой породы.'
+    },
+    {
+        'name': 'Бобтейл',
+        'image': '0011c5dd8b82085fcfcf2773da9e98ed.jpg',
+        'description': 'Обладатель самой длинной челки.'
+    },
+    {
+        'name': 'Спаниель',
+        'image': '63a0d555b2dc45b7f200ef303ee44870.jpg',
+        'description': 'Кудряшка Сью.'
+    },
+    {
+        'name': 'Бирманский',
+        'image': '5f5ac46a1738e48ca1c086e67fd52b3e.jpg',
+        'description': 'Полудлинношёрстный кот с белыми "носочками" и голубыми глазами.'
+    },
+    {
+        'name': 'Турецкий ван',
+        'image': '4493397b1c48dfa5af562a9263bf2b74.jpg',
+        'description': 'Порода, которая любит воду и имеет характерный красно-белый окрас.'
+    },
+    {
+        'name': 'Египетский мау',
+        'image': 'c66fa40e31beb6ff86abd5bce1cf5e71.jpg',
+        'description': 'Единственная естественная порода с пятнистым окрасом.'
+    },
+    {
+        'name': 'Тонкинский',
+        'image': '8ee07b304e6dcfa26adea336bb50eefa.jpg',
+        'description': 'Гибрид сиамской и бурманской пород с аквамариновыми глазами.'
+    },
+    {
+        'name': 'Корат',
+        'image': 'e1d36188aa88cba858b5e26b12072338.jpg',
+        'description': 'Древняя порода из Таиланда с серебристо-голубой шерстью.'
+    },
+    {
+        'name': 'Манчкин',
+        'image': 'static/on.jpg',  # <- Исправлено: закрыты кавычки и добавлено расширение
+        'description': 'Порода с короткими лапами и игривым характером.'
+    },
+    {
+        'name': 'Девон-рекс',
+        'image': 'd0d1069a1148c58fdf930a3f3f8f37d4.jpg',
+        'description': 'Кот с волнистой шерстью, большими ушами и озорным характером.'
+    },
+    {
+        'name': 'Сибирский',
+        'image': 'acee46c88e8b3dad7dee4673204f97da.jpg',
+        'description': 'Русская порода с густой шерстью и гипоаллергенными свойствами.'
+    }  
+]
+@app.route('/lab2/catsanddog')
+def cats_gallery():
+    return render_template('catsanddog.html', cats=cats)
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)

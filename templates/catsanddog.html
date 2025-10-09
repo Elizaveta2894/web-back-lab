@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея собак и кошек</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .animal-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .animal-card:hover {
+            transform: translateY(-5px);
+        }
+        .animal-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .animal-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2d3436;
+            margin: 10px 0;
+        }
+        .animal-description {
+            color: #636e72;
+            font-size: 0.9em;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+        .stats {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+        .dog-badge {
+            background: #3498db;
+            color: white;
+        }
+        .cat-badge {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐶🐱 Галерея собак и кошек</h1>
+    
+    <div class="stats">
+        Всего животных в коллекции: {{ cats|length }}
+    </div>
+
+    <div class="gallery">
+        {% for animal in cats %}
+        <div class="animal-card">
+            <img src="{{ url_for('static', filename=animal.image) }}" 
+                 alt="{{ animal.name }}" 
+                 class="animal-image">
+            
+            {% if 'собака' in animal.description.lower() or 'такса' in animal.name.lower() or 'пудель' in animal.name.lower() or 'хаски' in animal.name.lower() or 'овчарка' in animal.name.lower() or 'алабай' in animal.name.lower() or 'доберман' in animal.name.lower() or 'сиба-ину' in animal.name.lower() or 'бульдог' in animal.name.lower() or 'шпиц' in animal.name.lower() or 'бишон' in animal.name.lower() or 'бобтейл' in animal.name.lower() or 'спаниель' in animal.name.lower() %}
+            <div class="type-badge dog-badge">🐶 Собака</div>
+            {% else %}
+            <div class="type-badge cat-badge">🐱 Кошка</div>
+            {% endif %}
+            
+            <div class="animal-name">{{ animal.name }}</div>
+            <div class="animal-description">{{ animal.description }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a href="/lab2" class="back-link">← Назад к лабораторной работе</a>
+</body>
+</html>
