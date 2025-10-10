@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стабровская Лиза. {% block lab %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpeg') }}">
+
+    
     <style>
         .main-menu-link {
             position: absolute;
@@ -27,7 +31,7 @@
 <body>
     <header>
         WEB-программирование, часть 2. {{ self.lab() }}
-        <a href="/" class="main-menu-link"> Главное меню</a>
+        <a href="/" class="main-menu-link">🏠 Главное меню</a>
     </header>
     
     <main>
