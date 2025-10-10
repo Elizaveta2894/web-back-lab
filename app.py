@@ -261,6 +261,8 @@ def index():
     <div class="container">
         <h1>Главное меню</h1>
         <a href="/lab1" class="menu-link">Перейти к лабораторной работе 1</a>
+        <a href="/lab2" class="menu-link lab2-link">Перейти к лабораторной работе 2</a>
+        
     </div>
 </body>
 </html>
@@ -582,6 +584,140 @@ def not_found(error):
     error_log.append(log_entry)
     
     return render_template('404.html'), 404
+
+@app.route('/lab2')
+def lab2_main():
+    return '''
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #636e72;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .menu-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        .menu-card:hover {
+            transform: translateY(-3px);
+        }
+        .menu-link {
+            display: block;
+            color: #2d3436;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        .menu-description {
+            color: #636e72;
+            font-size: 0.9em;
+        }
+        .main-menu-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Лабораторная работа 2</h1>
+        <h2>Шаблоны в Flask</h2>
+        
+        <div class="menu-grid">
+            <div class="menu-card">
+                <a href="/lab2/example" class="menu-link">Пример шаблона</a>
+                <div class="menu-description">Базовый шаблон с переменными</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/expressions" class="menu-link">Математические выражения</a>
+                <div class="menu-description">Вычисления в шаблоне Jinja2</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/filtres" class="menu-link">Фильтры</a>
+                <div class="menu-description">Работа с фильтрами шаблонов</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/flowers/0" class="menu-link">Цветы</a>
+                <div class="menu-description">Работа с параметрами URL</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/all_flowers" class="menu-link">Все цветы</a>
+                <div class="menu-description">Полный список цветов</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/add_flower/роза" class="menu-link">Добавить цветок</a>
+                <div class="menu-description">Добавление в коллекцию</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/calc/5/3" class="menu-link">Калькулятор</a>
+                <div class="menu-description">Математические операции</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/books" class="menu-link">Книги</a>
+                <div class="menu-description">Список литературы</div>
+            </div>
+            
+            <div class="menu-card">
+                <a href="/lab2/catsanddog" class="menu-link">Собаки и кошки</a>
+                <div class="menu-description">Галерея животных</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="/" class="main-menu-link">На главную</a>
+        </div>
+    </div>
+</body>
+</html>
+'''
 
 @app.route('/lab2/a')
 def a():
