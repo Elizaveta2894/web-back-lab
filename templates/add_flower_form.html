@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить цветок</title>
+</head>
+<body>
+    <h1>Добавить цветок</h1>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    <form method="POST">
+        <div>
+            <label>Название цветка:</label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label>Цена (руб):</label>
+            <input type="number" name="price" min="1" required>
+        </div>
+        <button type="submit">Добавить</button>
+    </form>
+    
+    <br>
+    <a href="/lab2/all_flowers">← Назад к списку цветов</a>
+</body>
+</html>

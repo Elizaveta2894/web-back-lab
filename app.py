@@ -587,137 +587,7 @@ def not_found(error):
 
 @app.route('/lab2')
 def lab2_main():
-    return '''
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторная работа 2</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        h1 {
-            color: #2d3436;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        h2 {
-            color: #636e72;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 30px 0;
-        }
-        .menu-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border-left: 4px solid #3498db;
-            transition: transform 0.3s ease;
-        }
-        .menu-card:hover {
-            transform: translateY(-3px);
-        }
-        .menu-link {
-            display: block;
-            color: #2d3436;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 8px;
-        }
-        .menu-description {
-            color: #636e72;
-            font-size: 0.9em;
-        }
-        .main-menu-link {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Лабораторная работа 2</h1>
-        <h2>Шаблоны в Flask</h2>
-        
-        <div class="menu-grid">
-            <div class="menu-card">
-                <a href="/lab2/example" class="menu-link">Пример шаблона</a>
-                <div class="menu-description">Базовый шаблон с переменными</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/expressions" class="menu-link">Математические выражения</a>
-                <div class="menu-description">Вычисления в шаблоне Jinja2</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/filtres" class="menu-link">Фильтры</a>
-                <div class="menu-description">Работа с фильтрами шаблонов</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/flowers/0" class="menu-link">Цветы</a>
-                <div class="menu-description">Работа с параметрами URL</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/all_flowers" class="menu-link">Все цветы</a>
-                <div class="menu-description">Полный список цветов</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/add_flower/роза" class="menu-link">Добавить цветок</a>
-                <div class="menu-description">Добавление в коллекцию</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/calc/5/3" class="menu-link">Калькулятор</a>
-                <div class="menu-description">Математические операции</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/books" class="menu-link">Книги</a>
-                <div class="menu-description">Список литературы</div>
-            </div>
-            
-            <div class="menu-card">
-                <a href="/lab2/catsanddog" class="menu-link">Собаки и кошки</a>
-                <div class="menu-description">Галерея животных</div>
-            </div>
-        </div>
-        
-        <div style="text-align: center;">
-            <a href="/" class="main-menu-link">На главную</a>
-        </div>
-    </div>
-</body>
-</html>
-'''
+    return render_template('lab2_main.html')
 
 @app.route('/lab2/a')
 def a():
@@ -727,77 +597,60 @@ def a():
 def a2():
     return 'со слешем'
 
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
+
+
+flower_list = [
+    {'name': 'роза', 'price': 300},
+    {'name': 'тюльпан', 'price': 310},
+    {'name': 'незабудка', 'price': 320},
+    {'name': 'ромашка', 'price': 330},
+    {'name': 'георгин', 'price': 300},
+    {'name': 'гладиолус', 'price': 310}
+]
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list) or flower_id < 0:
         abort(404)
     else:
-        return f'''
-<html>
-<body>
-    <h1>Цветок #{flower_id}</h1>
-    <p>Название: {flower_list[flower_id]}</p>
-    <a href="/lab2/all_flowers">Все цветы</a>
-</body>
-</html>
-'''
+        flower = flower_list[flower_id]
+        return render_template('flower_detail.html', 
+                             flower_id=flower_id, 
+                             flower=flower)
+
+@app.route('/lab2/add_flower/', methods=['GET', 'POST'])
+def add_flower():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        price = request.form.get('price')
+        if name and price:
+            flower_list.append({'name': name, 'price': int(price)})
+            return redirect('/lab2/all_flowers')
+        else:
+            return render_template('add_flower_form.html', error="Заполните все поля")
+    
+    return render_template('add_flower_form.html')
 
 @app.route('/lab2/add_flower/<name>')
 def add_flower_with_name(name):
-    flower_list.append(name)
-    return f'''
-<html>
-<body>
-    <h1>Цветок добавлен</h1>
-    <p>Добавлен: {name}</p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <a href="/lab2/all_flowers">Все цветы</a>
-</body>
-</html>
-'''
-
-@app.route('/lab2/add_flower/')
-def add_flower_without_name():
-    return '''
-<html>
-<body>
-    <h1>Ошибка 400</h1>
-    <p>Вы не задали имя цветка</p>
-    <a href="/lab2/all_flowers">Все цветы</a>
-</body>
-</html>
-''', 400
+    flower_list.append({'name': name, 'price': 300}) 
+    return redirect('/lab2/all_flowers')
 
 @app.route('/lab2/all_flowers')
 def all_flowers():
-    flowers_html = ''.join([f'<li><a href="/lab2/flowers/{i}">{flower}</a></li>' for i, flower in enumerate(flower_list)])
-    return f'''
-<html>
-<body>
-    <h1>Все цветы</h1>
-    <p>Количество: {len(flower_list)}</p>
-    <ul>{flowers_html}</ul>
-    <a href="/lab2/add_flower">Добавить цветок</a>
-    <a href="/lab2/clear_flowers">Очистить список</a>
-</body>
-</html>
-'''
+    return render_template('all_flowers.html', flower_list=flower_list)
+
+@app.route('/lab2/del_flower/<int:flower_id>')
+def delete_flower(flower_id):
+    if flower_id >= len(flower_list) or flower_id < 0:
+        abort(404)
+    flower_list.pop(flower_id)
+    return redirect('/lab2/all_flowers')
 
 @app.route('/lab2/clear_flowers')
 def clear_flowers():
     flower_list.clear()
-    return '''
-<html>
-<body>
-    <h1>Список очищен</h1>
-    <p>Все цветы удалены</p>
-    <a href="/lab2/all_flowers">Все цветы</a>
-    <a href="/lab2/add_flower">Добавить цветок</a>
-</body>
-</html>
-'''
+    return redirect('/lab2/all_flowers')
 
 @app.route('/lab2/example')
 def example():

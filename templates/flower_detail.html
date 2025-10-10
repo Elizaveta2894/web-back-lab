@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цветок #{{ flower_id }}</title>
+</head>
+<body>
+    <h1>Цветок #{{ flower_id }}</h1>
+    <p><strong>Название:</strong> {{ flower.name }}</p>
+    <p><strong>Цена:</strong> {{ flower.price }} руб</p>
+    
+    <a href="/lab2/all_flowers">← Назад к списку цветов</a>
+    <br>
+    <a href="/lab2/del_flower/{{ flower_id }}" style="color: red;">Удалить этот цветок</a>
+</body>
+</html>
