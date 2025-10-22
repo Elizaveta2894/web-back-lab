@@ -1,14 +1,44 @@
 from flask import Flask, url_for, request, redirect, render_template, abort, make_response,  send_file, Response, abort
 from lab1 import lab1
 from lab2 import lab2
+from lab3 import lab3
 import datetime
 import os
 app = Flask(__name__)
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
+app.register_blueprint(lab3)
 
 
-@app.route("/")
+@app.route('/start')
+def start():
+    return '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>НГТУ, ФБ, Лабораторные работы</title>
+    <link rel="stylesheet" href="''' + url_for('static', filename='main.css') + '''">
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+    </header>
+
+    <main>
+        <h1>Лабораторные работы по WEB-программированию</h1>
+        <ol>
+            <li><a href="/lab1">Первая лабораторная</a></li>
+            <li><a href="/lab2">Вторая лабораторная</a></li>
+            <li><a href="/lab3/">Третья лабораторная</a></li>
+        </ol>
+    </main>
+
+    <footer>
+        &copy; Стабровская Елизавета, ФБИ-33, 2025
+    </footer>
+</body>
+</html>
+'''
 
 
 @app.route('/index')
