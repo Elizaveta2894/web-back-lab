@@ -41,3 +41,9 @@ body {
             min-height: 100vh;
             color: #333;
         }
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    font-weight: bold;
+}
