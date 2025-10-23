@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block lab %}Настройки{% endblock %}
+
+{% block main %}
+<h1>Настройки</h1>
+
+<form>
+    <div>
+        <label>Цвет текста:</label>
+        <input type="color" name="color" value="{{ color or '#000000' }}">
+    </div>
+    
+    <div>
+        <label>Цвет фона:</label>
+        <input type="color" name="bg_color" value="{{ bg_color or '#ffffff' }}">
+    </div>
+    
+    <div>
+        <label>Размер текста:</label>
+        <select name="font_size">
+            <option value="14px" {{ 'selected' if font_size == '14px' }}>Маленький</option>
+            <option value="16px" {{ 'selected' if not font_size or font_size == '16px' }}>Обычный</option>
+            <option value="20px" {{ 'selected' if font_size == '20px' }}>Крупный</option>
+        </select>
+    </div>
+    
+    <button>Сохранить</button>
+</form>
+
+<div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; 
+            color: {{ color or '#000000' }}; 
+            background: {{ bg_color or '#ffffff' }}; 
+            font-size: {{ font_size or '16px' }};">
+    <strong>Пример текста</strong> с выбранными настройками
+</div>
+{% endblock %}

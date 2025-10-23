@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стабровская Лиза. {% block lab %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-
+    <style>
+        body {
+            color: {{ request.cookies.get('color', '#000000') }};
+            background: {{ request.cookies.get('bg_color', '#ffffff') }};
+            font-size: {{ request.cookies.get('font_size', '16px') }};
+        }
+    </style>
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpeg') }}">
 
     

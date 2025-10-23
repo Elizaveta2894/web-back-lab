@@ -184,3 +184,20 @@ body {
     font-size: 1.2em;
     color: #3c763d;
 }
+form div {
+    margin: 15px 0;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+}
+
+button {
+    padding: 8px 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
