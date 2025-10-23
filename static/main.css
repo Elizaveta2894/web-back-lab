@@ -47,3 +47,140 @@ body {
     margin-top: 5px;
     font-weight: bold;
 }
+
+/* Стили для страницы заказа */
+.form-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+}
+
+.drink-option, .addon-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drink-option:hover, .addon-option:hover {
+    border-color: #4CAF50;
+    background-color: #f0f8f0;
+}
+
+.drink-option input[type="radio"]:checked + .drink-name,
+.addon-option input[type="checkbox"]:checked + .addon-name {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.price {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Стили для страницы оплаты */
+.price-summary {
+    background: #e8f5e8;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 1.2em;
+    border: 2px solid #4CAF50;
+}
+
+.payment-form {
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Кнопки */
+.order-button, .pay-button, .cancel-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.order-button, .pay-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.order-button:hover, .pay-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #da190b;
+}
+
+.form-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+/* Стили для страницы успеха */
+.success-page {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.success-message {
+    background-color: #dff0d8;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.success-message p {
+    margin: 0 0 20px 0;
+    font-size: 1.2em;
+    color: #3c763d;
+}
