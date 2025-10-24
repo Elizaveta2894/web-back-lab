@@ -162,3 +162,12 @@ def train():
                                    ticket_type=ticket_type)
 
     return render_template('lab3/train_form.html', errors=errors)
+
+
+@lab3.route('/lab3/settings_clear')
+def settings_clear():
+    resp = make_response(redirect('/lab3/settings'))
+    resp.delete_cookie('color')
+    resp.delete_cookie('bg_color')
+    resp.delete_cookie('font_size')
+    return resp
