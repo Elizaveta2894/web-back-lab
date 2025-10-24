@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 3{% endblock %}
 
-{# основной контент: #}
 {% block main %}
     <h1>Формы, cookie</h1>
     <div>
-        {% if name %}
-            Привет, <span style="color: {{ name_color }}">{{ name }}</span>!
+        {% if name != "Аноним" %}
+            Привет, <span style="color: {{ name_color or 'black' }}">{{ name }}</span>!
+            <br>Возраст: {{ age }}
         {% else %}
-            Куки не установлены!
+            Привет, {{ name }}!
+            <br>Возраст: {{ age }}
         {% endif %}
     </div>
     <div>Список сделанных страниц:</div>
     <ol>
         <li>
-            <a href="/lab3/cookie">Куки</a> |
+            <a href="/lab3/cookie">Установить куки</a> | 
+            <a href="/lab3/del_cookie">Очистка куки</a> |
             <a href="/lab3/form1">Форма</a> |
-            <a href="/lab3/order">Заказ</a> |
-            <a href="/lab3/settings">Настройки</a>
+            <a href="/lab3/order">Заказ напитка</a> |
+            <a href="/lab3/settings">Настройки отображения</a>
         </li>
     </ol>
 {% endblock %}

@@ -35,7 +35,7 @@ def author():
 
 @lab1.route('/lab1/image')
 def image():
-    css_url = url_for('static', filename='lab1.css')
+    css_url = url_for('static', filename='lab1/lab1.css')
     
     html_content = f'''
 <!doctype html>
@@ -107,12 +107,12 @@ def image():
 <body>
     <div class="container">
         <h1>Леопард</h1>
-        <img src="/static/i.webp" alt="Леопард">
+        <img src="lab1/i.webp" alt="Леопард">
         <p>Леопард (барс, пантера, лат. Panthera pardus) — вид хищных млекопитающих семейства кошачьих.</p>
         
         <div class="nav-links">
             <a href="/lab1">← Назад к лабораторной работе</a>
-            <a href="/">На главную страницу →</a>
+            <a href="/index">На главную страницу →</a>
         </div>
     </div>
 </body>
@@ -237,8 +237,7 @@ def lab():
     
     <h2>Список роутов</h2>
     <div class="routes">
-        <a href="/">/ (Главная)</a>
-        <a href="/index">/index (Альтернативная главная)</a>
+        <a href="/index">/index (главная)</a>
         <a href="/lab1">/lab1 (Эта страница)</a>
         <a href="/lab1/image">/lab1/image (Изображение леопарда)</a>
         <a href="/counter">/counter (Счетчик посещений)</a>

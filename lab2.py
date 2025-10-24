@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, abort
-lab2= Blueprint('lab2', __name__)
+lab2 = Blueprint('lab2', __name__)
 
 
 @lab2.route('/lab2')
 def lab2_main():
-    return render_template('lab2_main.html')
+    return render_template('lab2/lab2_main.html')
 
 
 @lab2.route('/lab2/a')
@@ -33,7 +33,7 @@ def flowers(flower_id):
         abort(404)
     else:
         flower = flower_list[flower_id]
-        return render_template('flower_detail.html', 
+        return render_template('lab2/flower_detail.html', 
                              flower_id=flower_id, 
                              flower=flower)
 
@@ -44,23 +44,23 @@ def add_flower():
         name = request.form.get('name')
         price = request.form.get('price')
         if name and price:
-            flower_list.lab2end({'name': name, 'price': int(price)})
+            flower_list.append({'name': name, 'price': int(price)})  # исправлено: lab2end → append
             return redirect('/lab2/all_flowers')
         else:
-            return render_template('add_flower_form.html', error="Заполните все поля")
+            return render_template('lab2/add_flower_form.html', error="Заполните все поля")
     
-    return render_template('add_flower_form.html')
+    return render_template('lab2/add_flower_form.html')
 
 
 @lab2.route('/lab2/add_flower/<name>')
 def add_flower_with_name(name):
-    flower_list.lab2end({'name': name, 'price': 300}) 
+    flower_list.append({'name': name, 'price': 300})  
     return redirect('/lab2/all_flowers')
 
 
 @lab2.route('/lab2/all_flowers')
 def all_flowers():
-    return render_template('all_flowers.html', flower_list=flower_list)
+    return render_template('lab2/all_flowers.html', flower_list=flower_list)
 
 
 @lab2.route('/lab2/del_flower/<int:flower_id>')
@@ -79,8 +79,8 @@ def clear_flowers():
 
 @lab2.route('/lab2/example')
 def example():
-    name, lab_num, group, course = 'Стабровская Лиза', 2, 'ФБИ-33',3
-    fruits=[
+    name, lab_num, group, course = 'Стабровская Лиза', 2, 'ФБИ-33', 3
+    fruits = [
         {'name': 'яблоки', 'price': 100}, 
         {'name': 'груши', 'price': 120},
         {'name': 'апельсины', 'price': 80},
@@ -88,20 +88,20 @@ def example():
         {'name': 'манго', 'price': 321}
     ]
         
-    return render_template('example.html',
-                            name=name, lab_num=lab_num,group=group,
-                            course=course, fruits=fruits)
+    return render_template('lab2/example.html',
+                          name=name, lab_num=lab_num, group=group,
+                          course=course, fruits=fruits)
 
 
 @lab2.route('/lab2/')
 def lab2_2():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 @lab2.route('/lab2/filtres')
 def filtres():
-    phrase="О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase=phrase)
+    phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
+    return render_template('lab2/filter.html', phrase=phrase)
 
 
 @lab2.route('/lab2/calc/')
@@ -126,7 +126,8 @@ def calc(a, b):
         'power': a ** b
     }
     
-    return render_template('calc.html', a=a, b=b, operations=operations)
+    return render_template('lab2/calc.html', a=a, b=b, operations=operations)
+
 
 books = [
     {'author': 'Фёдор Достоевский', 'title': 'Преступление и наказание', 'genre': 'Роман', 'pages': 671},
@@ -146,114 +147,113 @@ books = [
 
 @lab2.route('/lab2/books')
 def books_list():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 cats = [
     {
         'name': 'Такса',
-        'image': 'a7675d70f12e9911ea69fe9666ceae42.jpg',
+        'image': 'lab2/a7675d70f12e9911ea69fe9666ceae42.jpg',
         'description': 'Милая сосиска.'
     },
     {
         'name': 'Пудель',
-        'image': 'cc8658fbaa3f9622235a0e3be8759a29.jpg',
+        'image': 'lab2/cc8658fbaa3f9622235a0e3be8759a29.jpg',
         'description': 'Белое облачко.'
     },
     {
         'name': 'Хаски',
-        'image': '59cd46c3fa80363b2267f9b142b21301.jpg',
+        'image': 'lab2/59cd46c3fa80363b2267f9b142b21301.jpg',
         'description': 'Разные глазки.'
     },
     {
         'name': 'Немецкая овчарка',
-        'image': '2dc3c030431710c0eccf56c376376c2f.jpg',
+        'image': 'lab2/2dc3c030431710c0eccf56c376376c2f.jpg',
         'description': 'Серьезная собака.'
     },
     {
         'name': 'Алабай',
-        'image': '1f83db3c6aa33be78e996d717ec7ac2e.jpg',
+        'image': 'lab2/1f83db3c6aa33be78e996d717ec7ac2e.jpg',
         'description': 'Не люблю эту породу, покусали в детстве.'
     },
     {
         'name': 'Доберман',
-        'image': '6766da6bba7e9db14e6d94e873276e6d.jpg',
+        'image': 'lab2/6766da6bba7e9db14e6d94e873276e6d.jpg',
         'description': 'Зверь, а не собака.'
     },
     {
         'name': 'Сиба-ину',
-        'image': '5864bbc3fb2a2034a0c619d82427d31e.jpg',
+        'image': 'lab2/5864bbc3fb2a2034a0c619d82427d31e.jpg',
         'description': 'Плачу как впервый раз, смотря "Хатико".'
     },
     {
         'name': 'Бульдог',
-        'image': '0e80503c2a88ad187c1777875086ce74.jpg',
+        'image': 'lab2/0e80503c2a88ad187c1777875086ce74.jpg',
         'description': 'Похож на милую свинку.'
     },
     {
         'name': 'Шпиц',
-        'image': '420ae034ee040ce2a5232e6cf845453b.jpg',
+        'image': 'lab2/420ae034ee040ce2a5232e6cf845453b.jpg',
         'description': 'Собака истинных леди.'
     },
     {
         'name': 'Бишон фризе',
-        'image': '8847d87ad716fcd9f8440ecdfccae916.jpg',
+        'image': 'lab2/8847d87ad716fcd9f8440ecdfccae916.jpg',
         'description': 'У меня моя краостка такой породы.'
     },
     {
         'name': 'Бобтейл',
-        'image': '0011c5dd8b82085fcfcf2773da9e98ed.jpg',
+        'image': 'lab2/0011c5dd8b82085fcfcf2773da9e98ed.jpg',
         'description': 'Обладатель самой длинной челки.'
     },
     {
         'name': 'Спаниель',
-        'image': '63a0d555b2dc45b7f200ef303ee44870.jpg',
+        'image': 'lab2/63a0d555b2dc45b7f200ef303ee44870.jpg',
         'description': 'Кудряшка Сью.'
     },
     {
         'name': 'Бирманский',
-        'image': '5f5ac46a1738e48ca1c086e67fd52b3e.jpg',
+        'image': 'lab2/5f5ac46a1738e48ca1c086e67fd52b3e.jpg',
         'description': 'Полудлинношёрстный кот с белыми "носочками" и голубыми глазами.'
     },
     {
         'name': 'Турецкий ван',
-        'image': '4493397b1c48dfa5af562a9263bf2b74.jpg',
+        'image': 'lab2/4493397b1c48dfa5af562a9263bf2b74.jpg',
         'description': 'Порода, которая любит воду и имеет характерный красно-белый окрас.'
     },
     {
         'name': 'Египетский мау',
-        'image': 'c66fa40e31beb6ff86abd5bce1cf5e71.jpg',
+        'image': 'lab2/c66fa40e31beb6ff86abd5bce1cf5e71.jpg',
         'description': 'Единственная естественная порода с пятнистым окрасом.'
     },
     {
         'name': 'Тонкинский',
-        'image': '8ee07b304e6dcfa26adea336bb50eefa.jpg',
+        'image': 'lab2/8ee07b304e6dcfa26adea336bb50eefa.jpg',
         'description': 'Гибрид сиамской и бурманской пород с аквамариновыми глазами.'
     },
     {
         'name': 'Корат',
-        'image': 'e1d36188aa88cba858b5e26b12072338.jpg',
+        'image': 'lab2/e1d36188aa88cba858b5e26b12072338.jpg',
         'description': 'Древняя порода из Таиланда с серебристо-голубой шерстью.'
     },
     {
         'name': 'Манчкин',
-        'image': 'static/on.jpg',  # <- Исправлено: закрыты кавычки и добавлено расширение
+        'image': 'lab2/on.jpg', 
         'description': 'Порода с короткими лапами и игривым характером.'
     },
     {
         'name': 'Девон-рекс',
-        'image': 'd0d1069a1148c58fdf930a3f3f8f37d4.jpg',
+        'image': 'lab2/d0d1069a1148c58fdf930a3f3f8f37d4.jpg',
         'description': 'Кот с волнистой шерстью, большими ушами и озорным характером.'
     },
     {
         'name': 'Сибирский',
-        'image': 'acee46c88e8b3dad7dee4673204f97da.jpg',
+        'image': 'lab2/acee46c88e8b3dad7dee4673204f97da.jpg',
         'description': 'Русская порода с густой шерстью и гипоаллергенными свойствами.'
     }  
 ]
 
-
 @lab2.route('/lab2/catsanddog')
 def cats_gallery():
-    return render_template('catsanddog.html', cats=cats)
+    return render_template('lab2/catsanddog.html', cats=cats)
 
 

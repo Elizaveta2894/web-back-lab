@@ -7,7 +7,16 @@ lab3 = Blueprint('lab3', __name__)
 def lab():
     name = request.cookies.get('name')
     name_color = request.cookies.get('name_color')
-    return render_template('lab3/lab3.html', name=name, name_color=name_color)
+    age = request.cookies.get('age')
+
+    display_name = name if name else "Аноним"
+
+    display_age = age if age else "не указан"
+    
+    return render_template('lab3/lab3.html', 
+                         name=display_name, 
+                         name_color=name_color,
+                         age=display_age)
 
 
 @lab3.route('/lab3/cookie')

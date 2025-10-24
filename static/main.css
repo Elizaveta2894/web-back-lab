@@ -48,7 +48,6 @@ body {
     font-weight: bold;
 }
 
-/* Стили для страницы заказа */
 .form-section {
     margin-bottom: 25px;
     padding: 20px;
@@ -164,7 +163,6 @@ body {
     text-align: center;
 }
 
-/* Стили для страницы успеха */
 .success-page {
     text-align: center;
     padding: 40px 20px;
