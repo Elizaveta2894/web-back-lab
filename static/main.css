@@ -199,3 +199,122 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Стили для формы железнодорожного билета */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Стили для билета */
+.ticket-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ticket {
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    margin: 20px 0;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dashed #333;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.ticket-type {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.ticket-type.child {
+    background: #ffeb3b;
+    color: #333;
+}
+
+.ticket-type.adult {
+    background: #2196f3;
+    color: white;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.info-row .label {
+    font-weight: bold;
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.info-row .value {
+    flex-grow: 1;
+}
+
+.ticket-price {
+    border-top: 2px dashed #333;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.price-breakdown {
+    margin-bottom: 10px;
+}
+
+.addition {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.total-price {
+    font-size: 18px;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.ticket-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.ticket-actions .button {
+    margin: 0 10px;
+}
