@@ -236,6 +236,7 @@ button {
     margin: 0 auto;
 }
 
+
 .ticket {
     border: 2px solid #333;
     border-radius: 10px;
@@ -393,4 +394,26 @@ button {
     font-size: 18px;
     color: #c62828;
     margin: 0;
+}
+
+.form-group {
+    margin: 20px 0;
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 120px;
+    text-align: center;
+}
+
+
+.result {
+    font-size: 24px;
+    padding: 20px;
+    background: #e8f5e8;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
 }
