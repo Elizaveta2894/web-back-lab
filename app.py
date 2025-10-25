@@ -2,12 +2,14 @@ from flask import Flask, url_for, request, redirect, render_template, abort, mak
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
+from lab4 import lab4
 import datetime
 import os
 app = Flask(__name__)
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
 app.register_blueprint(lab3)
+app.register_blueprint(lab4)
 
 
 @app.route('/start')
