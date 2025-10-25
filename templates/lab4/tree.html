@@ -1,13 +1,32 @@
 {% extends "base.html" %}
 
-{% block lab %}Нравится/не нравится{% endblock %}
+{% block lab %}Посадка деревьев{% endblock %}
 
 {% block main %}
-    <div>
-        Посажено деревьев: {{tree_count}}
+    <h1>Посадка деревьев</h1>
+    
+    <div class="tree-counter">
+        Посажено деревьев: <strong>{{ tree_count }}</strong>
+        {% if tree_count >= max_trees %}
+            <div class="warning">Достигнуто максимальное количество деревьев!</div>
+        {% endif %}
     </div>
+    
     <form method="post">
-        <button name="operation" value="plant">Посадить дерево</button>
-        <button name="operation" value="cut">Срубить дерево</button>
+        <div class="button-group">
+            <button name="operation" value="plant" 
+                    {% if tree_count >= max_trees %}disabled{% endif %}>
+                Посадить дерево
+            </button>
+            
+            <button name="operation" value="cut" 
+                    {% if tree_count <= 0 %}disabled{% endif %}>
+                Срубить дерево
+            </button>
+        </div>
     </form>
+    
+    <div style="margin-top: 20px;">
+        <a href="/lab4/" class="button">Назад в лабу 4</a>
+    </div>
 {% endblock %}
