@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block lab %}Возведение в степень{% endblock %}
+
+{% block main %}
+    <form method="post" action="/lab4/pow">
+        <h1>Возведение в степень</h1>
+        <div class="form-group">
+            <input type="number" name="x1" placeholder="Основание" required> 
+            <sup><input type="number" name="x2" placeholder="Степень" required></sup>
+        </div>
+        <button type="submit" class="button">=</button>
+    </form>
+    
+    <div style="margin-top: 20px;">
+        <a href="/lab4/" class="button">Назад в лабу 4</a>
+    </div>
+{% endblock %}
