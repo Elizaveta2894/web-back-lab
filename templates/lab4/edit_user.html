@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <h1>Редактирование профиля</h1>
+    
+    <form method="post">
+        <div>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" value="{{ user.login }}" required>
+        </div>
+        
+        <div>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+        </div>
+        
+        <div>
+            <label for="password">Новый пароль (оставьте пустым, если не хотите менять):</label>
+            <input type="password" id="password" name="password">
+        </div>
+        
+        <div>
+            <label for="password_confirm">Подтверждение нового пароля:</label>
+            <input type="password" id="password_confirm" name="password_confirm">
+        </div>
+        
+        <div>
+            <button type="submit">Сохранить изменения</button>
+            <button type="reset">Сбросить</button>
+        </div>
+    </form>
+
+    {% if error %}
+        <div style="color: red; font-weight: bold; margin: 20px 0; padding: 10px; border: 1px solid red;">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <a href="/lab4/users">Вернуться к списку пользователей</a><br>
+        <a href="/lab4/">Вернуться к лабораторной работе 4</a>
+    </div>
+{% endblock %}
