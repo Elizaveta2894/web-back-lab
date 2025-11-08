@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<div class="lab5-main">
+    <div class="welcome-section">
+        <h2>База знаний</h2>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Список статей</h3>
+            <a href="{{ url_for('lab5.list_articles') }}" class="btn">Перейти</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Создать статью</h3>
+            <a href="{{ url_for('lab5.create_article') }}" class="btn">Создать</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Вход в систему</h3>
+            <a href="{{ url_for('lab5.login') }}" class="btn">Войти</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Регистрация</h3>
+            <a href="{{ url_for('lab5.register') }}" class="btn">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
