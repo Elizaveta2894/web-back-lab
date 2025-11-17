@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <div style="text-align: center; margin-top: 50px;">
+        <h1 style="color: green;"> Успешный вход! </h1>
+        
+        <div style="font-size: 1.2em; margin: 20px 0;">
+            <p>Добро пожаловать, <strong>{{ login }}</strong>!</p>
+            <p>Вы успешно вошли в систему базы знаний.</p>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <a href="/" style="
+                display: inline-block;
+                padding: 12px 24px;
+                background-color: #4CAF50;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 1.1em;
+                transition: background-color 0.3s;
+            ">Перейти к базе знаний</a>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p>Или вы можете:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="/lab5/list">Посмотреть статьи</a></li>
+                <li><a href="/lab5/create">Создать новую статью</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

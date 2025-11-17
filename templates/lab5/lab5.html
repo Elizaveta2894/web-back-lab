@@ -5,29 +5,38 @@
 {% block main %}
 <div class="lab5-main">
     <div class="welcome-section">
-        <h2>База знаний</h2>
+        <h1>База знаний</h1>
+        <div class="navigation-bar" style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0; padding: 15px; background-color: #f5f5f5; border-radius: 8px;">
+            <div class="nav-links" style="display: flex; gap: 20px;">
+                <a href="{{ url_for('lab5.list_articles') }}">Список статей</a>
+                <a href="{{ url_for('lab5.create_article') }}">Создать статью</a>
+                <a href="{{ url_for('lab5.login') }}">Войти</a>
+                <a href="{{ url_for('lab5.register') }}">Регистрация</a>
+            </div>
+            
+            <div class="user-display" style="font-weight: bold;">
+                {% if login and login != 'Анонимный пользователь' and login != 'Anonymous' %}
+                    {{ login }}
+                {% else %}
+                    Anonymous
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <div class="features-grid">
-        <div class="feature-card">
-            <h3>Список статей</h3>
-            <a href="{{ url_for('lab5.list_articles') }}" class="btn">Перейти</a>
-        </div>
+    <div class="main-content">
+        <h2>Добро пожаловать в базу знаний!</h2>
+        <p>Здесь вы можете создавать, читать и управлять статьями.</p>
         
-        <div class="feature-card">
-            <h3>Создать статью</h3>
-            <a href="{{ url_for('lab5.create_article') }}" class="btn">Создать</a>
-        </div>
-        
-        <div class="feature-card">
-            <h3>Вход в систему</h3>
-            <a href="{{ url_for('lab5.login') }}" class="btn">Войти</a>
-        </div>
-        
-        <div class="feature-card">
-            <h3>Регистрация</h3>
-            <a href="{{ url_for('lab5.register') }}" class="btn">Зарегистрироваться</a>
-        </div>
+        {% if login and login != 'Анонимный пользователь' and login != 'Anonymous' %}
+            <div style="background-color: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <p>Приветствуем, <strong>{{ login }}</strong>! Рады видеть вас снова.</p>
+            </div>
+        {% else %}
+            <div style="background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <p>Для доступа ко всем функциям системы рекомендуется <a href="{{ url_for('lab5.login') }}">войти</a> или <a href="{{ url_for('lab5.register') }}">зарегистрироваться</a>.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
