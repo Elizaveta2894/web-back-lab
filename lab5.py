@@ -8,6 +8,22 @@ lab5 = Blueprint('lab5', __name__)
 def main():
     return render_template('lab5/lab5.html', login=session.get('login', 'Anonymous'))
 
+
+def db_connect():
+    conn = psycopg2.connect(
+        host='127.0.0.1',
+        database='liza_stabrovskaya_knowledge_base',
+        user='liza_stabrovskaya_knowledge_base',
+        password='555'
+    )
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    return conn, cur
+
+def db_close(conn, cur):
+    conn.commit()
+    cur.close()
+    conn.close()
+
 @lab5.route("/lab5/login", methods=['GET','POST'])
 def login():
     if request.method == 'GET':
@@ -20,44 +36,28 @@ def login():
         return render_template('lab5/login.html', error="Заполните все поля")
 
     try:
-        conn = psycopg2.connect(
-            host='127.0.0.1',
-            database='liza_stabrovskaya_knowledge_base',
-            user='liza_stabrovskaya_knowledge_base',
-            password='555'
-        )
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        conn, cur = db_connect()
+        
         cur.execute("SELECT * FROM users WHERE login = %s;", (login,))
         user = cur.fetchone()
 
         if not user:
-            cur.close()
-            conn.close()
+            db_close(conn, cur)
             return render_template('lab5/login.html', 
                                 error='Логин и/или пароль неверны')
         
         if user['password'] != password:
-            cur.close()
-            conn.close()
+            db_close(conn, cur)
             return render_template('lab5/login.html', 
                                 error='Логин и/или пароль неверны')
         
         session['login'] = login
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return render_template('lab5/success_login.html', login=login)
     
     except Exception as e:
         return render_template('lab5/login.html', 
                              error=f'Ошибка базы данных: {str(e)}')
-
-@lab5.route("/lab5/list")
-def list_articles():
-    return "Список статей"
-
-@lab5.route("/lab5/create")
-def create_article():
-    return "Создать статью"
 
 @lab5.route('/lab5/register', methods=['GET', 'POST'])
 def register():
@@ -69,26 +69,17 @@ def register():
 
     if not (login or password):
         return render_template('lab5/register.html', error='Заполните все поля')
-    
+
     try:
-        conn = psycopg2.connect(
-            host='127.0.0.1',
-            database='liza_stabrovskaya_knowledge_base',
-            user='liza_stabrovskaya_knowledge_base',
-            password='555'
-        )
-        cur = conn.cursor()  
+        conn, cur = db_connect()
 
         cur.execute("SELECT login FROM users WHERE login=%s;", (login,))
         if cur.fetchone():
-            cur.close()
-            conn.close()
+            db_close(conn, cur)
             return render_template('lab5/register.html', error='Такой пользователь уже существует')
         
         cur.execute("INSERT INTO users (login, password) VALUES (%s, %s);", (login, password))  
-        conn.commit()  
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return render_template('lab5/success.html', login=login)
     
     except Exception as e:
