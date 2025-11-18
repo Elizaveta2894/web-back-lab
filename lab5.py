@@ -1,13 +1,13 @@
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, render_template, session, request, redirect
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
+
 lab5 = Blueprint('lab5', __name__)
 
 @lab5.route("/")
 def main():
     return render_template('lab5/lab5.html', login=session.get('login', 'Anonymous'))
-
 
 def db_connect():
     conn = psycopg2.connect(
@@ -47,6 +47,7 @@ def login():
                                 error='Логин и/или пароль неверны')
         
         if not check_password_hash(user['password'], password): 
+            db_close(conn, cur)
             return render_template('lab5/login.html', 
                                 error='Логин и/или пароль неверны')
         
@@ -86,3 +87,46 @@ def register():
     
     except Exception as e:
         return render_template('lab5/register.html', error=f'Ошибка БД: {str(e)}')
+
+@lab5.route('/lab5/create', methods=['GET', 'POST'])
+def create():
+    try:
+        login = session.get('login')
+        if not login:
+            return redirect('/lab5/login')
+
+        if request.method == 'GET':
+            return render_template('lab5/create_article.html')
+
+        title = request.form.get('title')
+        article_text = request.form.get('article_text')
+
+        if not title or not article_text:
+            return render_template('lab5/create_article.html', 
+                                 error="Заполните название и текст статьи")
+
+        conn, cur = db_connect()
+
+        cur.execute("SELECT id FROM users WHERE login = %s;", (login,))
+        user = cur.fetchone()
+        
+        if not user:
+            db_close(conn, cur)
+            return redirect('/lab5/login')
+
+        user_id = user["id"]
+        
+        cur.execute("""
+            INSERT INTO articles (user_id, title, article_text) 
+            VALUES (%s, %s, %s);
+        """, (user_id, title, article_text))
+
+        db_close(conn, cur)
+        return redirect('/')
+    
+    except Exception as e:
+
+        if 'conn' in locals() and 'cur' in locals():
+            db_close(conn, cur)
+        return render_template('lab5/create_article.html', 
+                             error=f'Ошибка при сохранении статьи: {str(e)}')
