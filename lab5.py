@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request, redirect, current_app
+from flask import Blueprint, render_template, session, request, redirect, current_app, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -33,6 +33,12 @@ def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
+
+
+@lab5.route("/lab5/logout")
+def logout():
+    session.pop('login', None)
+    return redirect('/')
 
 @lab5.route("/lab5/login", methods=['GET','POST'])
 def login():
@@ -119,12 +125,16 @@ def create():
         if request.method == 'GET':
             return render_template('lab5/create_article.html')
 
-        title = request.form.get('title')
-        article_text = request.form.get('article_text')
+        title = request.form.get('title', '').strip()
+        article_text = request.form.get('article_text', '').strip()
 
-        if not title or not article_text:
+        if not title:
             return render_template('lab5/create_article.html', 
-                                 error="Заполните название и текст статьи")
+                                 error="Введите название статьи")
+        
+        if not article_text:
+            return render_template('lab5/create_article.html', 
+                                 error="Введите текст статьи")
 
         conn, cur = db_connect()
 
@@ -147,7 +157,7 @@ def create():
             cur.execute("INSERT INTO articles (user_id, title, article_text) VALUES (?, ?, ?);", (user_id, title, article_text))
 
         db_close(conn, cur)
-        return redirect('/')
+        return redirect('/lab5/list')
     
     except Exception as e:
         if 'conn' in locals() and 'cur' in locals():
@@ -178,16 +188,119 @@ def list_articles():
         user_id = user["id"]
 
         if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT * FROM articles WHERE user_id = %s;", (user_id,))
+            cur.execute("SELECT * FROM articles WHERE user_id = %s ORDER BY id DESC;", (user_id,))
         else:
-            cur.execute("SELECT * FROM articles WHERE user_id = ?;", (user_id,))
+            cur.execute("SELECT * FROM articles WHERE user_id = ? ORDER BY id DESC;", (user_id,))
         
         articles = cur.fetchall()
 
         db_close(conn, cur)
-        return render_template('/lab5/articles.html', articles=articles)
+        return render_template('/lab5/articles.html', articles=articles, login=login)
     
     except Exception as e:
         if 'conn' in locals() and 'cur' in locals():
             db_close(conn, cur)
         return f"Ошибка при загрузке статей: {str(e)}"
+
+
+@lab5.route('/lab5/edit/<int:article_id>', methods=['GET', 'POST'])
+def edit_article(article_id):
+    try:
+        login = session.get('login')
+        if not login:
+            return redirect('/lab5/login')
+
+        conn, cur = db_connect()
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT id FROM users WHERE login = %s;", (login,))
+        else:
+            cur.execute("SELECT id FROM users WHERE login = ?;", (login,))
+        
+        user = cur.fetchone()
+        
+        if not user:
+            db_close(conn, cur)
+            return redirect('/lab5/login')
+
+        user_id = user["id"]
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT * FROM articles WHERE id = %s AND user_id = %s;", (article_id, user_id))
+        else:
+            cur.execute("SELECT * FROM articles WHERE id = ? AND user_id = ?;", (article_id, user_id))
+        
+        article = cur.fetchone()
+
+        if not article:
+            db_close(conn, cur)
+            return redirect('/lab5/list')
+
+        if request.method == 'GET':
+            db_close(conn, cur)
+            return render_template('lab5/edit_article.html', article=article)
+
+        title = request.form.get('title', '').strip()
+        article_text = request.form.get('article_text', '').strip()
+
+        if not title:
+            return render_template('lab5/edit_article.html', 
+                                 article=article,
+                                 error="Введите название статьи")
+        
+        if not article_text:
+            return render_template('lab5/edit_article.html', 
+                                 article=article,
+                                 error="Введите текст статьи")
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE articles SET title = %s, article_text = %s WHERE id = %s;", 
+                       (title, article_text, article_id))
+        else:
+            cur.execute("UPDATE articles SET title = ?, article_text = ? WHERE id = ?;", 
+                       (title, article_text, article_id))
+
+        db_close(conn, cur)
+        return redirect('/lab5/list')
+    
+    except Exception as e:
+        if 'conn' in locals() and 'cur' in locals():
+            db_close(conn, cur)
+        return render_template('lab5/edit_article.html', 
+                             error=f'Ошибка при редактировании статьи: {str(e)}')
+
+
+@lab5.route('/lab5/delete/<int:article_id>')
+def delete_article(article_id):
+    try:
+        login = session.get('login')
+        if not login:
+            return redirect('/lab5/login')
+
+        conn, cur = db_connect()
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT id FROM users WHERE login = %s;", (login,))
+        else:
+            cur.execute("SELECT id FROM users WHERE login = ?;", (login,))
+        
+        user = cur.fetchone()
+        
+        if not user:
+            db_close(conn, cur)
+            return redirect('/lab5/login')
+
+        user_id = user["id"]
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("DELETE FROM articles WHERE id = %s AND user_id = %s;", (article_id, user_id))
+        else:
+            cur.execute("DELETE FROM articles WHERE id = ? AND user_id = ?;", (article_id, user_id))
+        
+        db_close(conn, cur)
+        return redirect('/lab5/list')
+    
+    except Exception as e:
+        if 'conn' in locals() and 'cur' in locals():
+            db_close(conn, cur)
+        return f"Ошибка при удалении статьи: {str(e)}"

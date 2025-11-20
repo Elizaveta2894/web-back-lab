@@ -11,11 +11,7 @@
             background: {{ request.cookies.get('bg_color', '#ffffff') }};
             font-size: {{ request.cookies.get('font_size', '16px') }};
         }
-    </style>
-    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpeg') }}">
-
-    
-    <style>
+        
         .main-menu-link {
             position: absolute;
             top: 20px;
@@ -28,16 +24,49 @@
             font-size: 14px;
             transition: all 0.3s ease;
         }
+        
         .main-menu-link:hover {
             background: #2980b9;
             transform: translateY(-2px);
         }
+        
+        .auth-links {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .auth-links a {
+            color: #3498db;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        
+        .auth-links a:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
     </style>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpeg') }}">
 </head>
 <body>
     <header>
         WEB-программирование, часть 2. {{ self.lab() }}
-        <a href="/" class="main-menu-link">🏠 Главное меню</a>
+        <a href="/" class="main-menu-link">Главное меню</a>
+        
+        <div class="auth-links">
+            {% if session.get('login') %}
+                <a href="/lab5/list">Мои статьи</a>
+                <a href="/lab5/create">Создать статью</a>
+                <a href="/lab5/logout">Выйти ({{ session.get('login') }})</a>
+            {% else %}
+                <a href="/lab5/login">Войти</a>
+                <a href="/lab5/register">Регистрация</a>
+            {% endif %}
+        </div>
     </header>
     
     <main>

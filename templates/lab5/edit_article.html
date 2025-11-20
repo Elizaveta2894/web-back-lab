@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block lab %}Создание статьи{% endblock %}
+{% block lab %}Редактирование статьи{% endblock %}
 
 {% block main %}
-    <h1>Создание статьи</h1>
+    <h1>Редактирование статьи</h1>
 
     {% if error %}
         <div style="color: red; margin-bottom: 15px; padding: 10px; border: 1px solid red; border-radius: 4px;">
@@ -17,7 +17,7 @@
                 Название статьи:
                 <input type="text" maxlength="50" name="title" required 
                        style="width: 100%; padding: 8px; margin-top: 5px;"
-                       value="{{ request.form.title if request.form }}">
+                       value="{{ article.title if article else '' }}">
             </label>
         </div>
 
@@ -25,13 +25,13 @@
             <label>
                 Текст статьи:
                 <textarea name="article_text" required 
-                         style="width: 100%; height: 200px; padding: 8px; margin-top: 5px;">{{ request.form.article_text if request.form }}</textarea>
+                         style="width: 100%; height: 200px; padding: 8px; margin-top: 5px;">{{ article.article_text if article else '' }}</textarea>
             </label>
         </div>
 
         <div>
-            <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px;">
-                Создать статью
+            <button type="submit" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 4px;">
+                Сохранить изменения
             </button>
             <a href="/lab5/list" style="margin-left: 10px; padding: 10px 20px; background-color: #f0f0f0; color: #333; text-decoration: none; border-radius: 4px;">
                 Отмена
