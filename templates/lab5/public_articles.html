@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block lab %}База знаний - Публичные статьи{% endblock %}
+
+{% block main %}
+    <h1 style="color: #2c3e50; margin-bottom: 2rem;"> Публичные статьи</h1>
+    
+    {% if articles %}
+        {% for article in articles %}
+            <div style="border: 1px solid #ddd; padding: 1.5rem; margin: 1rem 0; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                    <h2 style="margin: 0; color: #2c3e50;">
+                        {{ article.title }}
+                        {% if article.is_favorite %}
+                            <span style="color: gold;" title="Любимая статья">Любимая статья</span>
+                        {% endif %}
+                    </h2>
+                    <div style="font-size: 0.9rem; color: #666; text-align: right;">
+                        <div>Автор: {{ article.real_name or article.login }}</div>
+                        {% if article.is_public %}
+                            <div style="color: #27ae60;"> Публичная</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <p style="white-space: pre-wrap; margin: 0; line-height: 1.6;">{{ article.article_text }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 3rem; color: #666;">
+            <p style="font-size: 1.2rem;">Пока нет публичных статей.</p>
+            {% if not session.get('login') %}
+                <p style="margin-top: 1rem;">
+                    <a href="/lab5/login" style="color: #3498db;">Войдите</a> или 
+                    <a href="/lab5/register" style="color: #3498db;">зарегистрируйтесь</a>, 
+                    чтобы создать свою статью!
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

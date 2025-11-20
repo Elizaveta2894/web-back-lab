@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Пользователи - База знаний</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #2c3e50; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+        }
+        th { 
+            background-color: #3498db; 
+            color: white; 
+        }
+        tr:hover { background-color: #f5f5f5; }
+        .user-count {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>👥 Список пользователей</h1>
+    
+    {% if users %}
+        <div class="user-count">
+            📊 Всего пользователей: <strong>{{ users|length }}</strong>
+        </div>
+        
+        <table>
+            <tr>
+                <th>👤 Логин</th>
+                <th>📛 Реальное имя</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td><strong>{{ user.login }}</strong></td>
+                <td>{{ user.real_name or 'Не указано' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div style="text-align: center; padding: 40px; color: #666;">
+            <p style="font-size: 1.2rem;">Пока нет зарегистрированных пользователей.</p>
+            <a href="/lab5/register" style="color: #3498db;">Станьте первым!</a>
+        </div>
+    {% endif %}
+    
+    <p style="margin-top: 30px;">
+        <a href="/lab5/">← На главную</a>
+    </p>
+</body>
+</html>

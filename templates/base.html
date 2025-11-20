@@ -49,22 +49,39 @@
         .auth-links a:hover {
             background: rgba(52, 152, 219, 0.1);
         }
+         .page-title-gradient {
+            text-align: right;
+            margin-right: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 20px 0;
+        }
     </style>
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpeg') }}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        <div class="page-title-gradient">
+            WEB-программирование, часть 2. {{ self.lab() }}
+        </div>
         <a href="/" class="main-menu-link">Главное меню</a>
         
         <div class="auth-links">
+            <a href="/lab5/"> Главная</a>
+            <a href="/lab5/public"> Публичные статьи</a>
+            <a href="/lab5/users"> Пользователи</a>
             {% if session.get('login') %}
-                <a href="/lab5/list">Мои статьи</a>
-                <a href="/lab5/create">Создать статью</a>
-                <a href="/lab5/logout">Выйти ({{ session.get('login') }})</a>
+                <a href="/lab5/list"> Мои статьи</a>
+                <a href="/lab5/create"> Создать статью</a>
+                <a href="/lab5/profile"> Профиль</a>
+                <a href="/lab5/logout"> Выйти ({{ session.get('login') }})</a>
             {% else %}
-                <a href="/lab5/login">Войти</a>
-                <a href="/lab5/register">Регистрация</a>
+                <a href="/lab5/login"> Войти</a>
+                <a href="/lab5/register"> Регистрация</a>
             {% endif %}
         </div>
     </header>

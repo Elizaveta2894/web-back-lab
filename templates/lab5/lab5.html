@@ -10,8 +10,14 @@
             <div class="nav-links" style="display: flex; gap: 20px;">
                 <a href="{{ url_for('lab5.list_articles') }}">Список статей</a>
                 <a href="{{ url_for('lab5.create_article') }}">Создать статью</a>
-                <a href="{{ url_for('lab5.login') }}">Войти</a>
-                <a href="{{ url_for('lab5.register') }}">Регистрация</a>
+                <a href="{{ url_for('lab5.public_articles') }}">Публичные статьи</a>
+                <a href="{{ url_for('lab5.users_list') }}">Пользователи</a>
+                {% if login and login != 'Анонимный пользователь' and login != 'Anonymous' %}
+                    <a href="{{ url_for('lab5.profile') }}">Профиль</a>
+                {% else %}
+                    <a href="{{ url_for('lab5.login') }}">Войти</a>
+                    <a href="{{ url_for('lab5.register') }}">Регистрация</a>
+                {% endif %}
             </div>
             
             <div class="user-display" style="font-weight: bold;">
@@ -31,10 +37,18 @@
         {% if login and login != 'Анонимный пользователь' and login != 'Anonymous' %}
             <div style="background-color: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0;">
                 <p>Приветствуем, <strong>{{ login }}</strong>! Рады видеть вас снова.</p>
+                <div style="margin-top: 10px;">
+                    <a href="{{ url_for('lab5.list_articles') }}" style="margin-right: 10px;"> Мои статьи</a>
+                    <a href="{{ url_for('lab5.create_article') }}" style="margin-right: 10px;"> Создать статью</a>
+                    <a href="{{ url_for('lab5.logout') }}">🚪 Выйти</a>
+                </div>
             </div>
         {% else %}
             <div style="background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                <p>Для доступа ко всем функциям системы рекомендуется <a href="{{ url_for('lab5.login') }}">войти</a> или <a href="{{ url_for('lab5.register') }}">зарегистрироваться</a>.</p>
+                <p>Для доступа ко всем функциям системы рекомендуется 
+                   <a href="{{ url_for('lab5.login') }}">войти</a> или 
+                   <a href="{{ url_for('lab5.register') }}">зарегистрироваться</a>.
+                </p>
             </div>
         {% endif %}
     </div>

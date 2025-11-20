@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block lab %}База знаний - Профиль{% endblock %}
+
+{% block main %}
+    <div style="max-width: 500px; margin: 0 auto;">
+        <h1 style="text-align: center; color: #2c3e50; margin-bottom: 2rem;"> Настройки профиля</h1>
+        
+        {% if errors %}
+            <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                {% for error in errors %}
+                    <p style="margin: 0.5rem 0;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50;">
+                    👤 Реальное имя:
+                </label>
+                <input type="text" name="real_name" 
+                       value="{{ user.real_name if user else '' }}"
+                       style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 5px;"
+                       placeholder="Ваше настоящее имя">
+            </div>
+
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: #e9ecef; border-radius: 5px;">
+                <h3 style="color: #495057; margin-bottom: 1rem;"> Смена пароля</h3>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #495057;">
+                        Текущий пароль:
+                    </label>
+                    <input type="password" name="current_password" 
+                           style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 5px;"
+                           placeholder="Введите текущий пароль">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #495057;">
+                        Новый пароль:
+                    </label>
+                    <input type="password" name="new_password" 
+                           style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 5px;"
+                           placeholder="Введите новый пароль">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #495057;">
+                        Подтверждение пароля:
+                    </label>
+                    <input type="password" name="confirm_password" 
+                           style="width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 5px;"
+                           placeholder="Повторите новый пароль">
+                </div>
+            </div>
+
+            <button type="submit" 
+                    style="width: 100%; background: #3498db; color: white; padding: 0.75rem; border: none; border-radius: 5px; font-size: 1.1rem;">
+                Сохранить изменения
+            </button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block lab %}Ошибка{% endblock %}
+
+{% block main %}
+    <div style="text-align: center; padding: 3rem 1rem;">
+        <div style="background: #f8d7da; color: #721c24; padding: 2rem; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">❌</div>
+            <h1 style="color: #721c24; margin-bottom: 1rem;">Произошла ошибка</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; background: #f5c6cb; padding: 1rem; border-radius: 5px;">{{ error }}</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <a href="/" 
+                   style="display: block; background: #3498db; color: white; padding: 1rem; text-decoration: none; border-radius: 5px; text-align: center;">
+                    🏠 На главную
+                </a>
+                <a href="/lab5/users" 
+                   style="display: block; background: #6c757d; color: white; padding: 1rem; text-decoration: none; border-radius: 5px; text-align: center;">
+                    👥 Пользователи
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
