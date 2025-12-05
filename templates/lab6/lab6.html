@@ -13,7 +13,6 @@
     
     <h1>Аренда офисов</h1>
     
-    <!-- Информация о пользователе -->
     <div class="user-info-box">
         <p>Текущий пользователь: 
             <strong id="current-user">
@@ -31,30 +30,24 @@
         {% endif %}
     </div>
     
-    <!-- Контейнер списка офисов -->
     <div class="office-list-container">
         <h2> Список офисов</h2>
         
-        <!-- Сообщение о загрузке -->
         <div id="loading-message" class="loading">
             Загрузка списка офисов...
         </div>
         
-        <!-- Список офисов (будет заполнен JavaScript) -->
         <ul id="office-list"></ul>
         
-        <!-- Сообщение если нет офисов -->
         <div id="no-offices-message" style="display: none; text-align: center; color: #6c757d;">
             Нет доступных офисов
         </div>
     </div>
     
-    <!-- Блок общей стоимости -->
     <div class="total-price-container">
         <p id="total-price">Загрузка информации...</p>
     </div>
     
-    <!-- Информация о системе -->
     <div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; font-size: 14px;">
         <h3 style="color: #2c3e50; margin-top: 0;">ℹ Как пользоваться системой:</h3>
         <ul style="color: #555;">
@@ -70,9 +63,8 @@
 
 {% block script %}
 <script>
-// Функция для получения списка офисов
+
 function getOfficeList() {
-    // Скрываем сообщение об отсутствии офисов
     document.getElementById('no-offices-message').style.display = 'none';
     
     const url = '/lab6/json-rpc-api/';
@@ -91,7 +83,7 @@ function getOfficeList() {
     })
     .then(response => response.json())
     .then(data => {
-        // Скрываем сообщение о загрузке
+
         document.getElementById('loading-message').style.display = 'none';
         
         if (data.error) {
@@ -100,30 +92,26 @@ function getOfficeList() {
             return;
         }
         
-        // Получаем список офисов
         const officeList = data.result;
         const ul = document.getElementById('office-list');
-        ul.innerHTML = ''; // Очищаем список
+        ul.innerHTML = ''; 
         
         if (officeList.length === 0) {
             document.getElementById('no-offices-message').style.display = 'block';
             return;
         }
         
-        // Считаем общую стоимость арендованных офисов
         let totalPrice = 0;
         const currentUser = "{{ session.get('login', '') }}";
         
-        // Для каждого офиса создаем элемент списка
+
         officeList.forEach(office => {
             const li = document.createElement('li');
             li.className = 'office-item';
             
-            // Определяем статус офиса
             const isOccupied = office.tenant ? true : false;
             const isMyOffice = office.tenant === currentUser;
             
-            // Формируем HTML для офиса
             li.innerHTML = `
                 <div class="office-header">
                     <div class="office-title">Офис №${office.number}</div>
@@ -137,10 +125,8 @@ function getOfficeList() {
                 </div>
             `;
             
-            // Добавляем кнопки действий
             const actionsDiv = li.querySelector(`#actions-${office.number}`);
             
-            // Кнопка бронирования (только если офис свободен)
             if (!isOccupied) {
                 const bookBtn = document.createElement('button');
                 bookBtn.className = 'btn btn-book';
@@ -151,7 +137,6 @@ function getOfficeList() {
                 actionsDiv.appendChild(bookBtn);
             }
             
-            // Кнопка отмены (только если офис арендован текущим пользователем)
             if (isMyOffice) {
                 const cancelBtn = document.createElement('button');
                 cancelBtn.className = 'btn btn-cancel';
@@ -161,14 +146,12 @@ function getOfficeList() {
                 };
                 actionsDiv.appendChild(cancelBtn);
                 
-                // Добавляем стоимость к общей сумме
                 totalPrice += office.price;
             }
             
             ul.appendChild(li);
         });
         
-        // Обновляем общую стоимость
         updateTotalPrice(totalPrice);
     })
     .catch(error => {
@@ -178,7 +161,6 @@ function getOfficeList() {
     });
 }
 
-// Функция для обновления общей стоимости
 function updateTotalPrice(totalPrice) {
     const totalElem = document.getElementById('total-price');
     if (totalPrice > 0) {
@@ -191,7 +173,6 @@ function updateTotalPrice(totalPrice) {
     }
 }
 
-// Функция для бронирования офиса
 function booking(officeNumber) {
     showMessage(`Пытаемся забронировать офис №${officeNumber}...`, 'info');
     
@@ -223,7 +204,7 @@ function booking(officeNumber) {
             }
         } else {
             showMessage('✅ Офис успешно забронирован!', 'success');
-            getOfficeList(); // Обновляем список
+            getOfficeList(); 
         }
     })
     .catch(error => {
@@ -232,7 +213,6 @@ function booking(officeNumber) {
     });
 }
 
-// Функция для отмены бронирования
 function cancellation(officeNumber) {
     if (!confirm(`Вы уверены, что хотите освободить офис №${officeNumber}?`)) {
         return;
@@ -268,7 +248,7 @@ function cancellation(officeNumber) {
             }
         } else {
             showMessage('✅ Бронь успешно отменена!', 'success');
-            getOfficeList(); // Обновляем список
+            getOfficeList(); 
         }
     })
     .catch(error => {
@@ -277,13 +257,10 @@ function cancellation(officeNumber) {
     });
 }
 
-// Вспомогательные функции для уведомлений
 function showMessage(text, type = 'info') {
-    // Удаляем старые сообщения
     const oldMessages = document.querySelectorAll('.temp-message');
     oldMessages.forEach(msg => msg.remove());
     
-    // Создаем новое сообщение
     const messageDiv = document.createElement('div');
     messageDiv.className = `temp-message ${type === 'error' ? 'error-message' : 'success-message'}`;
     messageDiv.textContent = text;
@@ -292,11 +269,9 @@ function showMessage(text, type = 'info') {
     messageDiv.style.borderRadius = '4px';
     messageDiv.style.animation = 'fadeIn 0.3s';
     
-    // Добавляем в начало контейнера
     const container = document.querySelector('.lab6-container');
     container.insertBefore(messageDiv, container.firstChild);
     
-    // Автоматически удаляем через 5 секунд
     setTimeout(() => {
         if (messageDiv.parentNode) {
             messageDiv.style.opacity = '0';
@@ -314,7 +289,7 @@ function showError(text) {
     showMessage(text, 'error');
 }
 
-// Добавляем CSS анимацию
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeIn {
@@ -324,12 +299,12 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Загружаем список офисов при загрузке страницы
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Страница lab6 загружена');
     setTimeout(() => {
         getOfficeList();
-    }, 500); // Небольшая задержка для плавности
+    }, 500); 
 });
 </script>
 {% endblock %}

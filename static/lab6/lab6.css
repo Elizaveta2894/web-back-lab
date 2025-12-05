@@ -1,6 +1,4 @@
-/* static/css/lab6.css */
 
-/* Общие стили для страницы lab6 */
 .lab6-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -16,7 +14,6 @@
     text-align: center;
 }
 
-/* Блок информации о пользователе */
 .user-info-box {
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
@@ -35,7 +32,7 @@
     color: #3498db;
 }
 
-/* Контейнер списка офисов */
+
 .office-list-container {
     background-color: white;
     border-radius: 10px;
@@ -50,7 +47,7 @@
     font-size: 22px;
 }
 
-/* Список офисов */
+
 #office-list {
     list-style-type: none;
     padding: 0;
