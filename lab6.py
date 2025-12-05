@@ -34,7 +34,7 @@ def api():
         office_number = data['params']
         for office in offices:
             if office['number'] == office_number:
-                if office['tenant'] ! = '': 
+                if office['tenant']!= '': 
                     return {
                         'jsonrpc': '2.0',
                         'error': {
@@ -52,4 +52,3 @@ def api():
                 },
             'id': id
         }
-

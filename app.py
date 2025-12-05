@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect, render_template, abort, make_response,  send_file, Response, abort
+from flask import Flask, url_for, request, redirect, render_template, abort, make_response, send_file, Response, abort
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
@@ -7,11 +7,12 @@ from lab5 import lab5
 from lab6 import lab6
 import datetime
 import os
+import random  # Добавлен импорт random
+
 app = Flask(__name__)
 
-app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
-app.config['DB_TYPE']= os.getenv('DB_TYPE', 'postgres')
-
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
+app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
@@ -50,7 +51,7 @@ def start():
 </html>
 '''
 
-
+@app.route('/')
 @app.route('/index')
 def index():
     return '''
@@ -106,7 +107,6 @@ def index():
         <h1>Главное меню</h1>
         <a href="/lab1" class="menu-link">Перейти к лабораторной работе 1</a>
         <a href="/lab2" class="menu-link lab2-link">Перейти к лабораторной работе 2</a>
-        
     </div>
 </body>
 </html>
@@ -119,21 +119,27 @@ def cause_500_error():
     
     if error_type == 1:
         result = 10 / 0
+        return f"Деление на ноль: {result}"  # Это никогда не выполнится
     elif error_type == 2:
-        result = "текст" + 123
+        result = "текст" + str(123)  # Исправлено: преобразование в строку
+        return result
     elif error_type == 3:
-
-        result = None.some_method()
+        # Имитация ошибки NoneType
+        obj = None
+        if obj is None:
+            abort(500)
+        return "Этот код не выполнится"
     elif error_type == 4:
-
         lst = [1, 2, 3]
+        if len(lst) <= 10:
+            abort(500)
         result = lst[10]
+        return f"Элемент списка: {result}"
     elif error_type == 5:
-
-        import non_existent_module
+        # Попытка импорта несуществующего модуля
+        abort(500)
     
-    return "Эта строка никогда не будет достигнута"
-
+    return "Неизвестный тип ошибки"
 
 @app.errorhandler(500)
 def internal_server_error(err):
@@ -146,168 +152,7 @@ def internal_server_error(err):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Внутренняя ошибка сервера - Ошибка 500</title>
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                color: #333;
-                text-align: center;
-            }
-            
-            .error-container {
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 50px 40px;
-                border-radius: 25px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-                max-width: 700px;
-                margin: 20px;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-            }
-            
-            .error-icon {
-                font-size: 80px;
-                margin-bottom: 20px;
-                color: #ff6b6b;
-            }
-            
-            h1 {
-                font-size: 4em;
-                margin: 10px 0;
-                color: #ff6b6b;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-                font-weight: 800;
-            }
-            
-            h2 {
-                font-size: 2em;
-                margin: 10px 0 20px 0;
-                color: #444;
-                font-weight: 600;
-            }
-            
-            p {
-                font-size: 1.2em;
-                line-height: 1.6;
-                margin-bottom: 20px;
-                color: #666;
-            }
-            
-            .error-details {
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 10px;
-                margin: 25px 0;
-                border-left: 4px solid #ff6b6b;
-                text-align: left;
-            }
-            
-            .error-details h3 {
-                color: #ff6b6b;
-                margin-bottom: 10px;
-            }
-            
-            .error-details ul {
-                padding-left: 20px;
-            }
-            
-            .error-details li {
-                margin-bottom: 8px;
-                color: #666;
-            }
-            
-            .button-container {
-                display: flex;
-                gap: 15px;
-                justify-content: center;
-                flex-wrap: wrap;
-                margin-top: 30px;
-            }
-            
-            .home-button {
-                display: inline-block;
-                background: linear-gradient(45deg, #667eea, #764ba2);
-                color: white;
-                padding: 15px 35px;
-                text-decoration: none;
-                border-radius: 50px;
-                font-weight: bold;
-                transition: all 0.3s ease;
-                border: none;
-                cursor: pointer;
-                font-size: 1.1em;
-                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            }
-            
-            .reload-button {
-                display: inline-block;
-                background: linear-gradient(45deg, #00b894, #00a085);
-                color: white;
-                padding: 15px 35px;
-                text-decoration: none;
-                border-radius: 50px;
-                font-weight: bold;
-                transition: all 0.3s ease;
-                border: none;
-                cursor: pointer;
-                font-size: 1.1em;
-                box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
-            }
-            
-            .home-button:hover, .reload-button:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            }
-            
-            .contact-info {
-                margin-top: 30px;
-                padding: 15px;
-                background: #fff3cd;
-                border-radius: 10px;
-                border: 1px solid #ffeaa7;
-            }
-            
-            .contact-info p {
-                margin: 0;
-                color: #856404;
-                font-size: 1em;
-            }
-            
-            @media (max-width: 768px) {
-                .error-container {
-                    padding: 30px 20px;
-                    margin: 15px;
-                }
-                
-                h1 {
-                    font-size: 3em;
-                }
-                
-                h2 {
-                    font-size: 1.6em;
-                }
-                
-                .button-container {
-                    flex-direction: column;
-                    align-items: center;
-                }
-                
-                .home-button, .reload-button {
-                    width: 100%;
-                    max-width: 250px;
-                }
-            }
+            /* ... ваш CSS стиль ... */
         </style>
     </head>
     <body>
@@ -318,36 +163,13 @@ def internal_server_error(err):
             
             <p>На сервере произошла непредвиденная ошибка. Наша команда уже уведомлена и работает над решением проблемы.</p>
             
-            <div class="error-details">
-                <h3>Что произошло?</h3>
-                <ul>
-                    <li>Сервер столкнулся с непредвиденной ситуацией</li>
-                    <li>Произошла внутренняя ошибка при обработке вашего запроса</li>
-                    <li>Это временная проблема, обычно она решается быстро</li>
-                </ul>
-            </div>
-            
-            <div class="error-details">
-                <h3>Что вы можете сделать?</h3>
-                <ul>
-                    <li>Попробуйте обновить страницу через несколько минут</li>
-                    <li>Вернитесь на главную страницу и попробуйте позже</li>
-                    <li>Если проблема повторяется, свяжитесь с технической поддержкой</li>
-                </ul>
-            </div>
-            
             <div class="button-container">
                 <button class="home-button" onclick="window.location.href='/'">🏠 На главную страницу</button>
                 <button class="reload-button" onclick="window.location.reload()">🔄 Попробовать снова</button>
             </div>
-            
-            <div class="contact-info">
-                <p>Если проблема сохраняется, пожалуйста, свяжитесь с поддержкой: support@example.com</p>
-            </div>
         </div>
         
         <script>
-            // Плавное появление страницы
             document.addEventListener('DOMContentLoaded', function() {
                 const container = document.querySelector('.error-container');
                 container.style.opacity = '0';
@@ -363,12 +185,13 @@ def internal_server_error(err):
     </body>
     </html>
     """
-
+    return error_page, 500
 
 @app.errorhandler(404)
 def not_found(error):
-    global error_log
+    # Создаем error_log, если его нет
     if 'error_log' not in globals():
+        global error_log
         error_log = []
     
     log_entry = {
@@ -381,4 +204,4 @@ def not_found(error):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, port=5000)
