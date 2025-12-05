@@ -2,31 +2,78 @@
 
 {% block lab %}Лабораторная работа 6{% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab6.css') }}">
+{% endblock %}
+
 {% block main %}
-<h1>Аренда офисов</h1>
-
-<div id="office-list-container">
-    <h2>Список офисов:</h2>
-    <ul id="office-list">
-
-        <li>Загрузка...</li>
-    </ul>
+<div class="lab6-container">
+    <a href="{{ url_for('lab5.main') }}" class="btn btn-return">← Вернуться к лабораторной 5</a>
     
-    <div id="total-price-container">
-        <p id="total-price"></p>
+    <h1>Аренда офисов</h1>
+    
+    <!-- Информация о пользователе -->
+    <div class="user-info-box">
+        <p>Текущий пользователь: 
+            <strong id="current-user">
+                {% if session.get('login') %}
+                    {{ session.get('login') }}
+                {% else %}
+                    Не авторизован
+                {% endif %}
+            </strong>
+        </p>
+        {% if not session.get('login') %}
+        <p style="color: #e74c3c; margin-top: 10px;">
+            ⚠️ Для бронирования офиса необходимо авторизоваться
+        </p>
+        {% endif %}
     </div>
-</div>
-
-<div id="user-info">
-    <p>Текущий пользователь: <strong id="current-user">{{ session.get('login', 'Не авторизован') }}</strong></p>
+    
+    <!-- Контейнер списка офисов -->
+    <div class="office-list-container">
+        <h2> Список офисов</h2>
+        
+        <!-- Сообщение о загрузке -->
+        <div id="loading-message" class="loading">
+            Загрузка списка офисов...
+        </div>
+        
+        <!-- Список офисов (будет заполнен JavaScript) -->
+        <ul id="office-list"></ul>
+        
+        <!-- Сообщение если нет офисов -->
+        <div id="no-offices-message" style="display: none; text-align: center; color: #6c757d;">
+            Нет доступных офисов
+        </div>
+    </div>
+    
+    <!-- Блок общей стоимости -->
+    <div class="total-price-container">
+        <p id="total-price">Загрузка информации...</p>
+    </div>
+    
+    <!-- Информация о системе -->
+    <div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; font-size: 14px;">
+        <h3 style="color: #2c3e50; margin-top: 0;">ℹ Как пользоваться системой:</h3>
+        <ul style="color: #555;">
+            <li>Для бронирования офиса нажмите кнопку <strong>"Забронировать"</strong></li>
+            <li>Для отмены бронирования нажмите кнопку <strong>"Освободить"</strong></li>
+            <li>Один пользователь может арендовать несколько офисов</li>
+            <li>Стоимость аренды указана за месяц</li>
+            <li>Общая стоимость рассчитывается автоматически</li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
 
 {% block script %}
 <script>
-
+// Функция для получения списка офисов
 function getOfficeList() {
-    console.log('Запрашиваю список офисов...');
+    // Скрываем сообщение об отсутствии офисов
+    document.getElementById('no-offices-message').style.display = 'none';
     
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -42,100 +89,111 @@ function getOfficeList() {
         },
         body: JSON.stringify(json)
     })
-    .then(response => {
-        console.log('Ответ получен, статус:', response.status);
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log('Данные получены:', data);
+        // Скрываем сообщение о загрузке
+        document.getElementById('loading-message').style.display = 'none';
         
         if (data.error) {
             console.error('Ошибка от сервера:', data.error);
-            alert('Ошибка: ' + data.error.message);
+            showError('Ошибка при загрузке офисов: ' + data.error.message);
             return;
         }
         
+        // Получаем список офисов
         const officeList = data.result;
         const ul = document.getElementById('office-list');
         ul.innerHTML = ''; // Очищаем список
         
+        if (officeList.length === 0) {
+            document.getElementById('no-offices-message').style.display = 'block';
+            return;
+        }
+        
+        // Считаем общую стоимость арендованных офисов
         let totalPrice = 0;
         const currentUser = "{{ session.get('login', '') }}";
         
+        // Для каждого офиса создаем элемент списка
         officeList.forEach(office => {
             const li = document.createElement('li');
-            li.style.margin = '10px 0';
-            li.style.padding = '10px';
-            li.style.border = '1px solid #ddd';
-            li.style.borderRadius = '5px';
+            li.className = 'office-item';
             
-
+            // Определяем статус офиса
+            const isOccupied = office.tenant ? true : false;
+            const isMyOffice = office.tenant === currentUser;
+            
+            // Формируем HTML для офиса
             li.innerHTML = `
-                <strong>Офис №${office.number}</strong><br>
-                Статус: ${office.tenant ? `<span style="color:red">Занят (${office.tenant})</span>` : '<span style="color:green">Свободен</span>'}<br>
-                Стоимость: ${office.price} руб./мес.
+                <div class="office-header">
+                    <div class="office-title">Офис №${office.number}</div>
+                    <div class="office-price">${office.price} руб./мес.</div>
+                </div>
+                <div class="office-details">
+                    <div class="office-status ${isOccupied ? 'status-occupied' : 'status-free'}">
+                        ${isOccupied ? `Занят (${office.tenant})` : 'Свободен'}
+                    </div>
+                    <div class="office-actions" id="actions-${office.number}"></div>
+                </div>
             `;
             
-            if (!office.tenant) {
+            // Добавляем кнопки действий
+            const actionsDiv = li.querySelector(`#actions-${office.number}`);
+            
+            // Кнопка бронирования (только если офис свободен)
+            if (!isOccupied) {
                 const bookBtn = document.createElement('button');
-                bookBtn.textContent = 'Забронировать';
-                bookBtn.style.marginLeft = '10px';
-                bookBtn.style.padding = '5px 10px';
-                bookBtn.style.backgroundColor = '#4CAF50';
-                bookBtn.style.color = 'white';
-                bookBtn.style.border = 'none';
-                bookBtn.style.borderRadius = '3px';
-                bookBtn.style.cursor = 'pointer';
-                
+                bookBtn.className = 'btn btn-book';
+                bookBtn.innerHTML = ' Забронировать';
                 bookBtn.onclick = function() {
-                    console.log('Пытаюсь забронировать офис №' + office.number);
                     booking(office.number);
                 };
-                
-                li.appendChild(bookBtn);
+                actionsDiv.appendChild(bookBtn);
             }
-        
-            if (office.tenant && office.tenant === currentUser) {
+            
+            // Кнопка отмены (только если офис арендован текущим пользователем)
+            if (isMyOffice) {
                 const cancelBtn = document.createElement('button');
-                cancelBtn.textContent = 'Освободить';
-                cancelBtn.style.marginLeft = '10px';
-                cancelBtn.style.padding = '5px 10px';
-                cancelBtn.style.backgroundColor = '#f44336';
-                cancelBtn.style.color = 'white';
-                cancelBtn.style.border = 'none';
-                cancelBtn.style.borderRadius = '3px';
-                cancelBtn.style.cursor = 'pointer';
-                
+                cancelBtn.className = 'btn btn-cancel';
+                cancelBtn.innerHTML = ' Освободить';
                 cancelBtn.onclick = function() {
-                    console.log('Пытаюсь освободить офис №' + office.number);
                     cancellation(office.number);
                 };
+                actionsDiv.appendChild(cancelBtn);
                 
-                li.appendChild(cancelBtn);
-                
+                // Добавляем стоимость к общей сумме
                 totalPrice += office.price;
             }
             
             ul.appendChild(li);
         });
         
-        const totalElem = document.getElementById('total-price');
-        if (totalPrice > 0) {
-            totalElem.textContent = `Общая стоимость вашей аренды: ${totalPrice} руб./мес.`;
-            totalElem.style.color = 'blue';
-            totalElem.style.fontWeight = 'bold';
-        } else {
-            totalElem.textContent = 'У вас нет арендованных офисов';
-        }
+        // Обновляем общую стоимость
+        updateTotalPrice(totalPrice);
     })
     .catch(error => {
         console.error('Ошибка при выполнении запроса:', error);
-        alert('Ошибка соединения с сервером');
+        showError('Ошибка соединения с сервером');
+        document.getElementById('loading-message').style.display = 'none';
     });
 }
 
+// Функция для обновления общей стоимости
+function updateTotalPrice(totalPrice) {
+    const totalElem = document.getElementById('total-price');
+    if (totalPrice > 0) {
+        totalElem.innerHTML = `
+            Общая стоимость вашей аренды: 
+            <span class="total-price-amount">${totalPrice} руб./мес.</span>
+        `;
+    } else {
+        totalElem.textContent = 'У вас нет арендованных офисов';
+    }
+}
+
+// Функция для бронирования офиса
 function booking(officeNumber) {
-    console.log('Бронирование офиса №' + officeNumber);
+    showMessage(`Пытаемся забронировать офис №${officeNumber}...`, 'info');
     
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -152,32 +210,35 @@ function booking(officeNumber) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Ответ на бронирование:', data);
-        
         if (data.error) {
             switch(data.error.code) {
                 case 1:
-                    alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                    showError('Вы не авторизованы. Пожалуйста, войдите в систему.');
                     break;
                 case 2:
-                    alert('Офис уже занят другим пользователем.');
+                    showError('Офис уже занят другим пользователем.');
                     break;
                 default:
-                    alert('Ошибка: ' + data.error.message);
+                    showError('Ошибка: ' + data.error.message);
             }
         } else {
-            alert('Офис успешно забронирован!');
-            getOfficeList(); 
+            showMessage('✅ Офис успешно забронирован!', 'success');
+            getOfficeList(); // Обновляем список
         }
     })
     .catch(error => {
         console.error('Ошибка при бронировании:', error);
-        alert('Ошибка соединения');
+        showError('Ошибка соединения с сервером');
     });
 }
 
+// Функция для отмены бронирования
 function cancellation(officeNumber) {
-    console.log('Отмена брони офиса №' + officeNumber);
+    if (!confirm(`Вы уверены, что хотите освободить офис №${officeNumber}?`)) {
+        return;
+    }
+    
+    showMessage(`Отменяем бронь офиса №${officeNumber}...`, 'info');
     
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -194,33 +255,81 @@ function cancellation(officeNumber) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Ответ на отмену:', data);
-        
         if (data.error) {
             switch(data.error.code) {
                 case 1:
-                    alert('Вы не авторизованы.');
+                    showError('Вы не авторизованы.');
                     break;
                 case 3:
-                    alert('Вы не можете отменить чужую аренду.');
+                    showError('Вы не можете отменить чужую аренду.');
                     break;
                 default:
-                    alert('Ошибка: ' + data.error.message);
+                    showError('Ошибка: ' + data.error.message);
             }
         } else {
-            alert('Бронь успешно отменена!');
-            getOfficeList(); 
+            showMessage('✅ Бронь успешно отменена!', 'success');
+            getOfficeList(); // Обновляем список
         }
     })
     .catch(error => {
         console.error('Ошибка при отмене:', error);
-        alert('Ошибка соединения');
+        showError('Ошибка соединения');
     });
 }
 
+// Вспомогательные функции для уведомлений
+function showMessage(text, type = 'info') {
+    // Удаляем старые сообщения
+    const oldMessages = document.querySelectorAll('.temp-message');
+    oldMessages.forEach(msg => msg.remove());
+    
+    // Создаем новое сообщение
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `temp-message ${type === 'error' ? 'error-message' : 'success-message'}`;
+    messageDiv.textContent = text;
+    messageDiv.style.margin = '10px 0';
+    messageDiv.style.padding = '10px';
+    messageDiv.style.borderRadius = '4px';
+    messageDiv.style.animation = 'fadeIn 0.3s';
+    
+    // Добавляем в начало контейнера
+    const container = document.querySelector('.lab6-container');
+    container.insertBefore(messageDiv, container.firstChild);
+    
+    // Автоматически удаляем через 5 секунд
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.style.opacity = '0';
+            messageDiv.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 500);
+        }
+    }, 5000);
+}
+
+function showError(text) {
+    showMessage(text, 'error');
+}
+
+// Добавляем CSS анимацию
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+`;
+document.head.appendChild(style);
+
+// Загружаем список офисов при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Страница загружена, запускаю getOfficeList()');
-    getOfficeList();
+    console.log('Страница lab6 загружена');
+    setTimeout(() => {
+        getOfficeList();
+    }, 500); // Небольшая задержка для плавности
 });
 </script>
 {% endblock %}
