@@ -88,6 +88,9 @@ def put_film(id):
     
     if not film:
         abort(400, description="Отсутствуют данные для обновления")
+
+    if film['description'] == '':
+        return {'description': 'Заполните описание'}, 400
     
     films[id] = film
     
@@ -109,4 +112,3 @@ def add_film():
     films.append(film_data)
     
     return jsonify({"id": len(films) - 1}), 201
-    
