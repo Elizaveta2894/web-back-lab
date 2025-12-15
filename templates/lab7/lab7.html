@@ -7,17 +7,118 @@
 .modal {
     display: none;
     z-index: 100;
-    box-shadow: 3px 3px 5px black;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
     background: white;
-    width: 400px;
+    width: 450px;
     left: 50%;
-    top: 220px;
-    margin-left: -200px;
-    position: absolute;
-    padding: 20px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
+
 .error-message {
-    color: red;
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    background-color: #4a76a8;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+button {
+    background-color: #4a76a8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 2px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3a5f8c;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:nth-child(2) {
+    background-color: #e53935;
+}
+
+button:nth-child(2):hover {
+    background-color: #c62828;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.modal input, .modal textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal button {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.original-title {
+    font-style: italic;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.title-container .russian-title {
+    font-weight: 600;
+    margin-bottom: 3px;
 }
 </style>
 {% endblock %}
@@ -28,7 +129,7 @@
 <table>
     <thead>
     <tr>
-        <th>Название</th>
+        <th>Название (русское)</th>
         <th>Год</th>
         <th>Действие</th>
     </tr>

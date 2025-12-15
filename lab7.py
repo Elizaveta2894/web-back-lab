@@ -88,14 +88,19 @@ def put_film(id):
     
     if not film:
         abort(400, description="Отсутствуют данные для обновления")
-
-    if film['description'] == '':
+    
+    if not film.get('title', '').strip() and film.get('title_ru', '').strip():
+        film['title'] = film['title_ru']
+    
+    if film.get('description', '') == '':
         return {'description': 'Заполните описание'}, 400
+    
+    if not film.get('title', '').strip() and not film.get('title_ru', '').strip():
+        return {'title_ru': 'Заполните хотя бы одно название'}, 400
     
     films[id] = film
     
     return jsonify(films[id])
-
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
@@ -103,12 +108,20 @@ def add_film():
     
     if not film_data:
         abort(400, description="Отсутствуют данные для создания нового фильма")
-    
+
+    if not film_data.get('title', '').strip() and film_data.get('title_ru', '').strip():
+        film_data['title'] = film_data['title_ru']
+
     required_fields = ['title', 'title_ru', 'year', 'description']
     for field in required_fields:
         if field not in film_data:
             abort(400, description=f"Отсутствует обязательное поле: {field}")
     
-    films.append(film_data)
+    if film_data.get('description', '') == '':
+        return {'description': 'Заполните описание'}, 400
     
+    if not film_data.get('title', '').strip() and not film_data.get('title_ru', '').strip():
+        return {'title_ru': 'Заполните хотя бы одно название'}, 400
+    
+    films.append(film_data)
     return jsonify({"id": len(films) - 1}), 201

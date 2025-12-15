@@ -9,40 +9,57 @@ function fillFilmList() {
         
         for(let i = 0; i < films.length; i++) {
             let tr = document.createElement('tr');
-            let tdTitle = document.createElement('td');
-            let tdTitleRus = document.createElement('td');
+            
+            // Ячейка с названиями (русское + оригинальное)
+            let tdTitles = document.createElement('td');
+            let titleContainer = document.createElement('div');
+            titleContainer.className = 'title-container';
+            
+            let russianTitle = document.createElement('div');
+            russianTitle.className = 'russian-title';
+            russianTitle.innerText = films[i].title_ru;
+            
+            let originalTitle = document.createElement('div');
+            originalTitle.className = 'original-title';
+
+            if (films[i].title && films[i].title !== films[i].title_ru) {
+                originalTitle.innerText = `(${films[i].title})`;
+            }
+            
+            titleContainer.appendChild(russianTitle);
+            titleContainer.appendChild(originalTitle);
+            tdTitles.appendChild(titleContainer);
+            
             let tdYear = document.createElement('td');
-            let tdActions = document.createElement('td');
-
-            tdTitle.innerText = films[i].title;
-            tdTitleRus.innerText = films[i].title_ru;
             tdYear.innerText = films[i].year;
-
+            
+            let tdActions = document.createElement('td');
+            
             let editButton = document.createElement('button');
             editButton.innerText = 'редактировать';
             editButton.onclick = function() {
                 editFilm(i);
             };
-
+            
             let delButton = document.createElement('button');
             delButton.innerText = 'удалить';
             delButton.onclick = function() {
                 deleteFilm(i, films[i].title_ru);
             };
-
+            
             tdActions.append(editButton);
             tdActions.append(delButton);
-
-            tr.append(tdTitle);
-            tr.append(tdTitleRus);
-            tr.append(tdYear);
-            tr.append(tdActions);
+            
+            tr.append(tdTitles);  
+            tr.append(tdYear);    
+            tr.append(tdActions); 
             
             tbody.append(tr);
         }
     })
 }
 
+// Остальные функции остаются без изменений...
 function deleteFilm(id, title) {
     if(! confirm(`Вы точно хотите удалить фильм "${title}"?`))
         return;
@@ -120,5 +137,7 @@ function sendFilm() {
     .then(function(errors) {
         if(errors.description)
             document.getElementById('description-error').innerText = errors.description;
+        if(errors.title_ru)
+            document.getElementById('description-error').innerText = errors.title_ru;
     });
 }
