@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Регистрация</h1>
+
+    {# Вывод сообщения об ошибке, если оно есть #}
+    {% if error %}
+        <div style="color: red; padding: 10px; margin-bottom: 15px; border: 1px solid red; background-color: #ffe6e6;">
+            <strong>Ошибка:</strong> {{ error }}
+        </div>
+    {% endif %}
+
+    {# Вывод сообщения об успешной регистрации #}
+    {% if success %}
+        <div style="color: green; padding: 10px; margin-bottom: 15px; border: 1px solid green; background-color: #e6ffe6;">
+            <strong>Успех!</strong> {{ success }}
+        </div>
+    {% endif %}
+
+    <form action="/lab8/register" method="post">
+        <div>
+            <label>
+                Логин: <input type="text" name="login" value="{{ request.form.login if request.form else '' }}">
+            </label>
+        </div>
+
+        <div>
+            <label>
+                Пароль: <input type="password" name="password">
+            </label>
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    {# Секция для отладки - показ текущих пользователей в БД #}
+    <hr>
+    <h2>Текущие пользователи в базе данных:</h2>
+    <ul>
+        {% for user in users_list %}
+            <li>{{ user.login }} (ID: {{ user.id }})</li>
+        {% else %}
+            <li>Нет пользователей в базе данных</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

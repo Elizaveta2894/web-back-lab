@@ -1,11 +1,10 @@
 from flask import Flask, url_for, request, redirect, abort, render_template
 import os
 from os import path
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from db.models import users
-
-# Импорт db из пакета db
 
 from lab1 import lab1
 from lab2 import lab2
