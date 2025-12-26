@@ -6,6 +6,7 @@ from lab4 import lab4
 from lab5 import lab5
 from lab6 import lab6
 from lab7 import lab7
+from lab8 import lab8
 import datetime
 import os
 import random  
@@ -22,97 +23,13 @@ app.register_blueprint(lab4)
 app.register_blueprint(lab5)
 app.register_blueprint(lab6)
 app.register_blueprint(lab7)
-
-@app.route('/start')
-def start():
-    return '''
-<!DOCTYPE html>
-<html>
-<head>
-    <title>НГТУ, ФБ, Лабораторные работы</title>
-    <link rel="stylesheet" href="''' + url_for('static', filename='main.css') + '''">
-</head>
-<body>
-    <header>
-        НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
-    </header>
-
-    <main>
-        <h1>Лабораторные работы по WEB-программированию</h1>
-        <ol>
-            <li><a href="/lab1">Первая лабораторная</a></li>
-            <li><a href="/lab2">Вторая лабораторная</a></li>
-            <li><a href="/lab3/">Третья лабораторная</a></li>
-        </ol>
-    </main>
-
-    <footer>
-        &copy; Стабровская Елизавета, ФБИ-33, 2025
-    </footer>
-</body>
-</html>
-'''
+app.register_blueprint(lab8)
 
 @app.route('/')
 @app.route('/index')
+@app.route('/start')  # Все три адреса ведут на главное меню
 def index():
-    return '''
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Главное меню</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .menu-link {
-            display: block;
-            background: #0066cc;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin: 15px 0;
-            transition: all 0.3s ease;
-            font-size: 18px;
-        }
-        .menu-link:hover {
-            background: #0052a3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Главное меню</h1>
-        <a href="/lab1" class="menu-link">Перейти к лабораторной работе 1</a>
-        <a href="/lab2" class="menu-link lab2-link">Перейти к лабораторной работе 2</a>
-    </div>
-</body>
-</html>
-'''
+    return render_template('main_menu.html')
 
 @app.route('/error500')
 def cause_500_error():

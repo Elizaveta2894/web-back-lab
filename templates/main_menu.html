@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главное меню - Лабораторные работы</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        .menu-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .menu-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .lab-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+        }
+        
+        .lab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+        
+        .lab-number {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .lab-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .lab-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .lab-link:hover {
+            background: #2980b9;
+        }
+        
+        .student-info {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1 class="menu-title">WEB-программирование, часть 2</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Лабораторные работы по WEB-программированию
+        </p>
+        
+        <div class="labs-grid">
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 1</div>
+                <div class="lab-title">Первая лабораторная</div>
+                <a href="/lab1" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 2</div>
+                <div class="lab-title">Вторая лабораторная</div>
+                <a href="/lab2" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 3</div>
+                <div class="lab-title">Третья лабораторная</div>
+                <a href="/lab3" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 4</div>
+                <div class="lab-title">Четвертая лабораторная</div>
+                <a href="/lab4" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 5</div>
+                <div class="lab-title">База знаний</div>
+                <a href="/lab5" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 6</div>
+                <div class="lab-title">Список покупок</div>
+                <a href="/lab6" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 7</div>
+                <div class="lab-title">Настройки</div>
+                <a href="/lab7" class="lab-link">Перейти</a>
+            </div>
+            
+            <div class="lab-card">
+                <div class="lab-number">Лабораторная 8</div>
+                <div class="lab-title">База знаний (новая)</div>
+                <a href="/lab8" class="lab-link">Перейти</a>
+            </div>
+        </div>
+        
+        <div class="student-info">
+            <strong>Студент:</strong> Стабровская Елизавета<br>
+            <strong>Группа:</strong> ФБИ-33<br>
+            <strong>Курс:</strong> 3<br>
+            <strong>Год:</strong> 2025
+        </div>
+    </div>
+</body>
+</html>
