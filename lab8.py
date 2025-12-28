@@ -87,22 +87,45 @@ def register():
 
 @lab8.route('/lab8/articles/')
 @login_required
-def article_list(): 
-    user_articles = articles.query.filter_by(login_id=current_user.id).all()
+def article_list():
+    search_query = request.args.get('search', '').strip()
+    if search_query:
+        user_articles = articles.query.filter(
+            db.and_(
+                articles.login_id == current_user.id,
+                db.or_(
+                    articles.title.ilike(f'%{search_query}%'),
+                    articles.article_text.ilike(f'%{search_query}%')
+                )
+            )
+        ).all()
 
-    public_articles = articles.query.filter(
-        db.and_(
-            articles.is_public == True,
-            articles.login_id != current_user.id
-        )
-    ).all()
+        public_articles = articles.query.filter(
+            db.and_(
+                articles.is_public == True,
+                articles.login_id != current_user.id,
+                db.or_(
+                    articles.title.ilike(f'%{search_query}%'),
+                    articles.article_text.ilike(f'%{search_query}%')
+                )
+            )
+        ).all()
+    else:
+        user_articles = articles.query.filter_by(login_id=current_user.id).all()
+        public_articles = articles.query.filter(
+            db.and_(
+                articles.is_public == True,
+                articles.login_id != current_user.id
+            )
+        ).all()
     
     for article in public_articles:
         article.user_login = users.query.get(article.login_id).login
     
     return render_template('lab8/articles.html', 
                           articles=user_articles,
-                          public_articles=public_articles)
+                          public_articles=public_articles,
+                          search_query=search_query)
 
 @lab8.route('/lab8/create', methods=['GET', 'POST'])
 @login_required
@@ -196,3 +219,27 @@ def logout():
     logout_user()
     flash('Вы успешно вышли из системы', 'info')
     return redirect('/lab8/')
+
+@lab8.route('/lab8/public_articles')
+def public_articles():
+    search_query = request.args.get('search', '').strip()
+    
+    if search_query:
+        public_articles_list = articles.query.filter(
+            db.and_(
+                articles.is_public == True,
+                db.or_(
+                    articles.title.ilike(f'%{search_query}%'),
+                    articles.article_text.ilike(f'%{search_query}%')
+                )
+            )
+        ).all()
+    else:
+        public_articles_list = articles.query.filter_by(is_public=True).all()
+    
+    for article in public_articles_list:
+        article.user_login = users.query.get(article.login_id).login
+    
+    return render_template('lab8/public_articles.html', 
+                          public_articles=public_articles_list,
+                          search_query=search_query)

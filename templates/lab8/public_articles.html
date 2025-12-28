@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Публичные статьи - Лабораторная работа 8</title>
+    <link rel="stylesheet" href="{{ url_for('lab8.static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .articles-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .articles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .create-btn {
+            background: #48bb78;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .create-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .articles-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .article-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .article-title {
+            color: #2d3748;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .article-content {
+            color: #4a5568;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .article-meta {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .article-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .edit-btn {
+            background: #ed8936;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background: #dd6b20;
+        }
+        
+        .delete-btn {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background: #e53e3e;
+        }
+        
+        .no-articles {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+        
+        .no-articles i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #cbd5e0;
+        }
+        
+        .no-articles a {
+            display: inline-block;
+            margin-top: 20px;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+        }
+        
+        /* Стили для публичных статей */
+        .public-articles-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .public-articles-list {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+        
+        .public-article-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #48bb78;
+        }
+        
+        .author-info {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* Стили для flash-сообщений */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 5px solid #38a169;
+        }
+        
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border-left: 5px solid #e53e3e;
+        }
+        
+        .alert-info {
+            background: #bee3f8;
+            color: #1a365d;
+            border-left: 5px solid #3182ce;
+        }
+        
+        .alert-warning {
+            background: #feebc8;
+            color: #744210;
+            border-left: 5px solid #dd6b20;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: white;
+            font-size: 0.9em;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .articles-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .article-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .article-actions {
+                align-self: flex-end;
+            }
+            
+            .public-articles-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> Публичные статьи</h1>
+            <p>Все публичные статьи пользователей системы</p>
+            
+            <div class="search-container" style="margin: 20px 0; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <form method="GET" action="{{ url_for('lab8.public_articles') }}" style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Поиск по публичным статьям..." 
+                           value="{{ search_query or '' }}"
+                           style="flex: 1; padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 25px; font-size: 14px;">
+                    <button type="submit" 
+                            style="background: #48bb78; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                        🔍 Найти
+                    </button>
+                    {% if search_query %}
+                        <a href="{{ url_for('lab8.public_articles') }}" 
+                           style="color: #718096; text-decoration: none; font-size: 14px; margin-left: 10px;">
+                            Сбросить поиск
+                        </a>
+                    {% endif %}
+                </form>
+                {% if search_query %}
+                    <p style="margin-top: 10px; color: #4a5568; font-size: 14px;">
+                        Найдено публичных статей: {{ public_articles|length }}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <a href="/lab8/" class="back-btn">← На главную</a>
+        </div>
+        
+        {% if public_articles %}
+            <div class="public-articles-list">
+                {% for article in public_articles %}
+                <div class="public-article-card">
+                    <h3 class="article-title">{{ article.title }}</h3>
+                    <div class="article-content">
+                        {{ article.article_text[:150] }}{% if article.article_text|length > 150 %}...{% endif %}
+                    </div>
+                    <div class="author-info">
+                        <i class="fas fa-user"></i> Автор: {{ article.user_login }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px; background: white; border-radius: 10px;">
+                <i class="far fa-newspaper" style="font-size: 3em; color: #cbd5e0; margin-bottom: 20px;"></i>
+                <h3>Публичных статей пока нет</h3>
+                <p>Станьте первым, кто создаст публичную статью!</p>
+            </div>
+        {% endif %}
+        
+        <div style="text-align: center; margin-top: 40px; padding: 20px; color: white;">
+            <p>© 2025 НГТУ, ФБИ-33. Лабораторная работа 8</p>
+        </div>
+    </div>
+</body>
+</html>
