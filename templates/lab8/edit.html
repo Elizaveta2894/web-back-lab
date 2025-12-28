@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Редактировать статью</h2>
+    
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST" action="/lab8/edit/{{ article.id }}">
+        <div class="mb-3">
+            <label for="title" class="form-label">Заголовок</label>
+            <input type="text" class="form-control" id="title" name="title" 
+                   value="{{ article.title }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="content" class="form-label">Содержание</label>
+            <textarea class="form-control" id="content" name="content" 
+                      rows="10" required>{{ article.article_text }}</textarea>
+        </div>
+        
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="is_public" 
+                   name="is_public" {% if article.is_public %}checked{% endif %}>
+            <label class="form-check-label" for="is_public">
+                Сделать статью публичной
+            </label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        <a href="/lab8/articles" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}
