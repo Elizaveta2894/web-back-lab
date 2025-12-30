@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Новогодние Подарки - Lab9</title>
-    <link rel="stylesheet" href="{{ url_for('lab9.static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -46,6 +45,172 @@
             }
         }
 
+        /* Контейнер авторизации */
+        .auth-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .auth-btn {
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info span {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #FF5252;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .logout-btn:hover {
+            background: #FF3333;
+        }
+
+        /* Кнопка Деда Мороза */
+        .santa-btn {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(45deg, #FF5252, #FF9800);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .santa-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 82, 82, 0.6);
+        }
+
+        .santa-btn i {
+            margin-right: 8px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Модальное окно авторизации */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+            border: 2px solid #4CAF50;
+        }
+
+        .auth-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .auth-form h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #4CAF50;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .auth-buttons button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #FF5252;
+            color: white;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -82,6 +247,17 @@
             font-size: 1.2rem;
             color: #4CAF50;
             margin-bottom: 20px;
+        }
+
+        .special-notice {
+            background: linear-gradient(45deg, #FFD700, #FF9800);
+            color: #1a2a3a;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            display: none;
         }
 
         .stats {
@@ -127,7 +303,6 @@
             position: relative;
             width: 100%;
             min-height: 500px;
-            /* Ограничиваем область для коробок */
             margin-top: 20px;
             padding: 20px;
             border-radius: 15px;
@@ -139,8 +314,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             transform-style: preserve-3d;
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             z-index: 5;
         }
 
@@ -152,6 +327,31 @@
         .gift-box.opened {
             cursor: default;
             opacity: 0.7;
+        }
+
+        .gift-box.hidden-gift {
+            opacity: 0.3;
+            filter: blur(2px);
+            cursor: not-allowed;
+        }
+
+        .gift-box.special-gift {
+            position: relative;
+        }
+
+        .gift-box.special-gift::after {
+            content: '⭐';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 1.8rem;
+            animation: glitter 1s infinite;
+            z-index: 10;
+        }
+
+        @keyframes glitter {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
 
         .gift-box .box {
@@ -179,7 +379,7 @@
 
         .gift-box .body {
             width: 100%;
-            height: 140px;
+            height: 110px;
             background: linear-gradient(45deg, #4CAF50, #2196F3);
             position: absolute;
             top: 40px;
@@ -189,33 +389,19 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Зоны, которые должны быть свободны от коробок */
+        .gift-box.special-gift .body {
+            background: linear-gradient(45deg, #FFD700, #FF9800);
+        }
+
         .safe-zone {
             position: absolute;
             z-index: 20;
             pointer-events: none;
-        }
-
-        .safe-zone.instructions {
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: transparent;
-        }
-
-        .safe-zone.reset-btn {
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 60px;
-            background: transparent;
         }
 
         .instructions-container {
@@ -320,6 +506,11 @@
             border-left: 5px solid #4CAF50;
         }
 
+        .message-box.info {
+            background: rgba(33, 150, 243, 0.9);
+            border-left: 5px solid #2196F3;
+        }
+
         .overlay {
             display: none;
             position: fixed;
@@ -366,6 +557,28 @@
             margin-right: 8px;
         }
 
+        .test-accounts {
+            margin-top: 15px;
+            color: #888;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .test-accounts p {
+            margin-bottom: 5px;
+            color: #FFD700;
+        }
+
+        .test-accounts ul {
+            list-style: none;
+            padding-left: 15px;
+        }
+
+        .test-accounts li {
+            margin-bottom: 3px;
+            font-family: monospace;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -377,22 +590,25 @@
             }
             
             .gift-box {
-                width: 150px;
-                height: 150px;
+                width: 120px;
+                height: 120px;
             }
             
             .gift-box .body {
-                height: 110px;
-                font-size: 1rem;
+                height: 80px;
+                font-size: 0.9rem;
             }
             
-            .gift-box .lid {
-                height: 40px;
+            .santa-btn {
+                bottom: 70px;
+                right: 10px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
             
-            .safe-zone.reset-btn {
-                width: 250px;
-                height: 50px;
+            .auth-container {
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
@@ -400,11 +616,25 @@
 <body>
     <div class="snowflakes" id="snowflakes"></div>
     
+    <!-- Контейнер авторизации -->
+    <div class="auth-container" id="auth-container">
+        <!-- Будет заполнено скриптом -->
+    </div>
+
+    <!-- Кнопка Деда Мороза -->
+    <button class="santa-btn" id="santa-btn" onclick="santaRefill()">
+        <i class="fas fa-sleigh"></i> Дед Мороз
+    </button>
+
     <div class="container">
         <header>
             <div class="header-content">
                 <h1>🎄 Новогодние Подарки 🎁</h1>
                 <p class="subtitle">Выберите коробку и получите новогодний подарок!</p>
+
+                <div class="special-notice" id="special-notice">
+                    <i class="fas fa-crown"></i> Вы вошли как <span id="current-username"></span>. Вам доступны специальные подарки и функция Деда Мороза!
+                </div>
                 
                 <div class="stats">
                     <div class="stat-box">
@@ -419,21 +649,47 @@
             </div>
         </header>
 
-        <div class="safe-zone instructions"></div>
         <div class="instructions-container">
-            <p><i class="fas fa-info-circle"></i>Вы можете открыть только 3 коробки. Удачи!</p>
+            <p><i class="fas fa-info-circle"></i>Вы можете открыть только 3 коробки. <span id="auth-info">Для доступа к специальным подаркам войдите в систему.</span></p>
         </div>
 
         <div class="gifts-wrapper">
             <div class="gifts-container" id="gifts-container">
+                <!-- Подарки будут добавлены скриптом -->
             </div>
         </div>
 
-        <div class="safe-zone reset-btn"></div>
         <div class="reset-btn-container">
             <button class="reset-btn" onclick="resetGifts()">
                 <i class="fas fa-redo"></i> Сбросить все подарки
             </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно авторизации -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-form">
+            <h3>Вход в систему</h3>
+            <div class="form-group">
+                <label for="username">Логин:</label>
+                <input type="text" id="username" placeholder="Введите логин">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" placeholder="Введите пароль">
+            </div>
+            <div class="auth-buttons">
+                <button class="login-btn" onclick="login()">Войти</button>
+                <button class="cancel-btn" onclick="closeAuthModal()">Отмена</button>
+            </div>
+            <div class="test-accounts">
+                <p>Тестовые аккаунты:</p>
+                <ul>
+                    <li>admin / admin123</li>
+                    <li>santa / santa2024</li>
+                    <li>user / user123</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -448,8 +704,13 @@
     <div class="message-box" id="message-box"></div>
 
     <script>
+        // Глобальные переменные
         let gifts = {};
-        
+        let currentUser = null;
+        let isAuthenticated = false;
+        let specialGifts = [];
+
+        // Функция создания снежинок
         function createSnowflakes() {
             const container = document.getElementById('snowflakes');
             for (let i = 0; i < 50; i++) {
@@ -464,14 +725,195 @@
                 container.appendChild(snowflake);
             }
         }
-    
+
+        // Функции для работы с авторизацией
+        function showAuthModal() {
+            document.getElementById('auth-modal').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('Введите логин и пароль', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/lab9/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = username;
+                    isAuthenticated = true;
+                    closeAuthModal();
+                    showMessage(data.message, 'success');
+                    
+                    // Обновляем интерфейс
+                    updateAuthUI();
+                    loadGifts();
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Ошибка при входе в систему', 'error');
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/lab9/logout', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = null;
+                    isAuthenticated = false;
+                    showMessage(data.message, 'success');
+                    
+                    // Обновляем интерфейс
+                    updateAuthUI();
+                    loadGifts();
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/lab9/auth_status');
+                const data = await response.json();
+                
+                isAuthenticated = data.authenticated;
+                currentUser = data.username;
+                
+                updateAuthUI();
+            } catch (error) {
+                console.error('Auth status error:', error);
+            }
+        }
+
+        function updateAuthUI() {
+            const authContainer = document.getElementById('auth-container');
+            const santaBtn = document.getElementById('santa-btn');
+            const specialNotice = document.getElementById('special-notice');
+            const authInfo = document.getElementById('auth-info');
+            
+            if (isAuthenticated && currentUser) {
+                // Показываем информацию о пользователе
+                authContainer.innerHTML = `
+                    <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        <span>${currentUser}</span>
+                        <button class="logout-btn" onclick="logout()" title="Выйти">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Показываем кнопку Деда Мороза
+                santaBtn.style.display = 'block';
+                
+                // Показываем уведомление
+                document.getElementById('current-username').textContent = currentUser;
+                specialNotice.style.display = 'block';
+                
+                // Обновляем информацию об авторизации
+                authInfo.innerHTML = 'Вы авторизованы! Доступны специальные подарки.';
+            } else {
+                // Показываем кнопку входа
+                authContainer.innerHTML = `
+                    <button class="auth-btn" onclick="showAuthModal()">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                `;
+                
+                // Скрываем кнопку Деда Мороза
+                santaBtn.style.display = 'none';
+                
+                // Скрываем уведомление
+                specialNotice.style.display = 'none';
+                
+                // Обновляем информацию об авторизации
+                authInfo.innerHTML = 'Для доступа к специальным подаркам войдите в систему.';
+            }
+        }
+
+        async function santaRefill() {
+            if (!isAuthenticated) {
+                showMessage('Только авторизованные пользователи могут использовать эту функцию!', 'error');
+                return;
+            }
+            
+            if (!confirm('🎅 Дед Мороз наполнит все коробки новыми подарками! Вы уверены?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/lab9/santa_refill', {
+                    method: 'POST'
+                });
+                
+                if (response.status === 401) {
+                    showMessage('Требуется авторизация для использования этой функции!', 'error');
+                    isAuthenticated = false;
+                    updateAuthUI();
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    
+                    // Перезагружаем подарки
+                    setTimeout(() => {
+                        loadGifts();
+                    }, 1000);
+                } else {
+                    showMessage('Ошибка при наполнении коробок', 'error');
+                }
+            } catch (error) {
+                console.error('Santa refill error:', error);
+                showMessage('Ошибка при наполнении коробок', 'error');
+            }
+        }
+
+        // Основные функции для работы с подарками
         async function loadGifts() {
             try {
                 const response = await fetch('/lab9/get_gifts');
                 const data = await response.json();
                 gifts = data.gifts;
+                specialGifts = data.special_gifts || [];
+                isAuthenticated = data.authenticated;
+                currentUser = data.username;
+                
                 updateStats(data.unopened_count, data.opened_count || 0);
                 renderGifts();
+                
+                // Обновляем UI авторизации
+                updateAuthUI();
                 
                 if (data.opened_count >= 3) {
                     showMessage('Вы уже открыли максимальное количество коробок (3)!', 'info');
@@ -481,19 +923,25 @@
                 showMessage('Ошибка загрузки подарков', 'error');
             }
         }
-    
+
         function renderGifts() {
             const container = document.getElementById('gifts-container');
             container.innerHTML = '';
 
+            // Сортируем подарки так, чтобы открытые были в конце
             const sortedGifts = Object.values(gifts).sort((a, b) => {
                 if (a.opened === b.opened) return 0;
-                return a.opened ? -1 : 1;
+                return a.opened ? 1 : -1;
             });
             
             sortedGifts.forEach(gift => {
                 const giftElement = document.createElement('div');
-                giftElement.className = `gift-box ${gift.opened ? 'opened' : ''}`;
+                let className = 'gift-box';
+                if (gift.opened) className += ' opened';
+                if (specialGifts.includes(gift.id)) className += ' special-gift';
+                if (gift.hidden && !isAuthenticated) className += ' hidden-gift';
+                
+                giftElement.className = className;
                 giftElement.style.top = `${gift.position.top}%`;
                 giftElement.style.left = `${gift.position.left}%`;
                 
@@ -501,14 +949,22 @@
                     <div class="box">
                         <div class="lid"></div>
                         <div class="body">
-                            ${gift.opened ? '🎁 Пусто' : '🎁 Подарок'}
+                            ${gift.opened ? '🎁 Пусто' : 
+                              specialGifts.includes(gift.id) ? '⭐ Подарок' : '🎁 Подарок'}
                         </div>
                     </div>
                 `;
                 
                 if (!gift.opened) {
-                    giftElement.onclick = () => openGift(gift.id);
-                    giftElement.title = "Нажмите, чтобы открыть";
+                    if (gift.hidden && !isAuthenticated) {
+                        giftElement.title = "Требуется авторизация";
+                        giftElement.onclick = () => {
+                            showMessage('Этот подарок доступен только авторизованным пользователям! Войдите в систему.', 'error');
+                        };
+                    } else {
+                        giftElement.onclick = () => openGift(gift.id);
+                        giftElement.title = specialGifts.includes(gift.id) ? "Специальный подарок! ⭐" : "Нажмите, чтобы открыть";
+                    }
                 } else {
                     giftElement.title = "Эта коробка уже пуста";
                 }
@@ -544,7 +1000,11 @@
                     
                     renderGifts();
                     
-                    showMessage('Поздравляем с получением подарка!', 'success');
+                    if (data.is_special) {
+                        showMessage('🎉 Поздравляем с получением специального подарка!', 'success');
+                    } else {
+                        showMessage('Поздравляем с получением подарка!', 'success');
+                    }
 
                     if (data.opened_count >= 3) {
                         setTimeout(() => {
@@ -597,6 +1057,11 @@
                     if (response.ok) {
                         loadGifts();
                         showMessage('Все подарки сброшены!', 'success');
+                        
+                        // Сбрасываем авторизацию
+                        currentUser = null;
+                        isAuthenticated = false;
+                        updateAuthUI();
                     } else {
                         showMessage('Ошибка при сбросе подарков', 'error');
                     }
@@ -607,24 +1072,32 @@
             }
         }
 
-        async function updateStatistics() {
-            try {
-                const response = await fetch('/lab9/get_stats');
-                const data = await response.json();
-
-                console.log('Statistics:', data);
-            } catch (error) {
-                console.error('Error fetching statistics:', error);
-            }
-        }
-
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             createSnowflakes();
+            checkAuthStatus();
             loadGifts();
 
-            document.getElementById('overlay').onclick = closeGift;
+            // Обработчики событий
+            document.getElementById('overlay').onclick = () => {
+                closeGift();
+                closeAuthModal();
+            };
 
-            setInterval(updateStatistics, 30000);
+            // Закрытие по ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeGift();
+                    closeAuthModal();
+                }
+            });
+
+            // Автоматический вход при нажатии Enter
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
         });
     </script>
 </body>
